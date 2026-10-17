@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ЛОК СТОК — Ставка на знания | 100 вопросов (4 пака)</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 1. PeerJS для WebRTC + TURN -->
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js" async defer></script>
+  <!-- 2. MQTT.js поверх WebSockets (WSS) — 100% пробивает мобильные сети и NAT, даже если WebRTC заблокирован -->
+  <script src="https://cdn.jsdelivr.net/npm/mqtt@5.3.5/dist/mqtt.min.js" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
@@ -203,11 +206,11 @@
               <div class="space-y-3 mb-5 bg-black/30 p-3.5 rounded-xl border border-emerald-800/60">
                 <div>
                   <label class="block text-xs text-emerald-300 mb-1 font-medium">Ваше имя за столом:</label>
-                  <input id="join-player-name" type="text" placeholder="Например: Алексей" maxlength="20" class="w-full bg-emerald-950 border border-emerald-700 rounded-lg px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-amber-400" />
+                  <input id="join-player-name" type="text" placeholder="Например: Дима" maxlength="20" class="w-full bg-emerald-950 border border-emerald-700 rounded-lg px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-amber-400" />
                 </div>
                 <div>
                   <label class="block text-xs text-emerald-300 mb-1 font-medium">Код комнаты (из ссылки ведущего):</label>
-                  <input id="join-room-code" type="text" placeholder="Например: 4829" maxlength="10" class="w-full bg-emerald-950 border border-emerald-700 rounded-lg px-3 py-2 text-sm text-amber-300 font-mono font-bold uppercase focus:outline-none focus:border-amber-400" />
+                  <input id="join-room-code" type="text" placeholder="Например: 2149" maxlength="10" class="w-full bg-emerald-950 border border-emerald-700 rounded-lg px-3 py-2 text-sm text-amber-300 font-mono font-bold uppercase focus:outline-none focus:border-amber-400" />
                 </div>
               </div>
             </div>
@@ -227,13 +230,6 @@
       <!-- Sub-view B: HOST DASHBOARD (Экран ведущего)                      -->
       <!-- =============================================================== -->
       <div id="mp-host-dashboard" class="hidden space-y-5">
-        <!-- Local File Warning Banner -->
-        <div id="local-file-warning" class="hidden bg-amber-950/80 border border-amber-500/60 rounded-2xl p-3.5 text-xs text-amber-200 flex items-center justify-between gap-3">
-          <div>
-            ⚠️ <strong>Внимание:</strong> Вы открыли файл локально с компьютера (<code>file://</code>). Для игры с друзьями по интернету используйте вашу ссылку на <strong>GitHub Pages</strong>.
-          </div>
-        </div>
-
         <!-- Invite Link & Room Bar -->
         <div class="bg-emerald-950/90 border border-amber-500/40 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3 shadow-lg">
           <div class="flex flex-wrap items-center gap-3">
@@ -258,7 +254,7 @@
           <div class="flex items-center gap-3">
             <span id="host-net-status" class="text-xs font-semibold text-emerald-300 flex items-center gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Комната открыта
+              Запуск каналов связи...
             </span>
             <button type="button" onclick="window.leaveMultiplayer()" class="px-3 py-1.5 rounded-xl bg-rose-950/80 hover:bg-rose-900 text-rose-200 border border-rose-800/60 text-xs font-semibold transition">
               Закрыть комнату
@@ -273,7 +269,6 @@
             <!-- Pack & Question Control Header -->
             <div class="bg-emerald-950/80 border border-emerald-800/80 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
               <div class="flex flex-wrap items-center gap-2">
-                <!-- Pack Selector -->
                 <select id="host-pack-select" onchange="window.hostSelectPack(this.value)" class="bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-400">
                   <option value="0" class="bg-emerald-950 text-white">📦 Пак 1 (1–25)</option>
                   <option value="1" class="bg-emerald-950 text-white">📦 Пак 2 (26–50)</option>
@@ -393,7 +388,7 @@
                 </button>
               </div>
 
-              <!-- Answer & Winner Result Banner (Shown when revealed) -->
+              <!-- Answer & Winner Result Banner -->
               <div id="host-answer-banner" class="hidden mt-5 bg-gradient-to-r from-amber-950/90 via-emerald-950/95 to-amber-950/90 border-2 border-amber-400 rounded-2xl p-5 shadow-2xl">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-3">
                   <div>
@@ -439,12 +434,15 @@
         <!-- Player Top Status Bar -->
         <div class="bg-emerald-950/95 border border-emerald-800 rounded-2xl p-4 flex items-center justify-between shadow-lg">
           <div>
-            <div class="flex items-center gap-2">
+            <div class="flex flex-wrap items-center gap-2">
               <span id="player-conn-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></span>
               <span id="player-my-name" class="font-display font-bold text-base text-white">Игрок</span>
               <span id="player-room-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-900 text-emerald-300 border border-emerald-700">Комната</span>
+              <button type="button" onclick="window.manualReconnectPlayer()" class="text-[11px] px-2 py-0.5 rounded bg-amber-500/20 hover:bg-amber-500/40 text-amber-300 border border-amber-500/40 font-semibold transition">
+                🔄 Обновить связь
+              </button>
             </div>
-            <div id="player-status-badge" class="text-xs text-emerald-300 mt-0.5">Подключение к ведущему...</div>
+            <div id="player-status-badge" class="text-xs text-emerald-300 mt-1">Подключение к ведущему...</div>
           </div>
           <div class="text-right">
             <div class="text-[10px] uppercase tracking-wider text-emerald-300 font-bold">Ваш баланс</div>
@@ -688,17 +686,7 @@
 
   <script>
     // =========================================================================
-    // НАЗВАНИЯ 4 ПАКОВ (ПО 25 ВОПРОСОВ В КАЖДОМ = 100 ВОПРОСОВ)
-    // =========================================================================
-    const PACK_NAMES = [
-      "Пак 1: Классический (1–25)",
-      "Пак 2: Мировой масштаб (26–50)",
-      "Пак 3: Наука и рекорды (51–75)",
-      "Пак 4: Эрудит-мастер (76–100)"
-    ];
-
-    // =========================================================================
-    // ПОЛНАЯ БАЗА ИЗ 100 ВОПРОСОВ
+    // ПОЛНАЯ БАЗА ИЗ 100 ВОПРОСОВ (4 ПАКА ПО 25 ВОПРОСОВ)
     // =========================================================================
     const QUESTIONS = [
       // ================= ПАК 1 (Вопросы 1–25) =================
@@ -712,7 +700,7 @@
       { id: 8, category: "Спорт", q: "Какова длина классической марафонской дистанции в километрах (округлённо до целого)?", hints: ["Дистанция символизирует пробег воина от Марафона до Афин.", "Она больше 35 километров, но меньше 50 километров.", "Точная дистанция составляет XX км и 195 метров."], answer: 42, unit: "км", expl: "Длина марафона составляет 42 км 195 м (42 км)." },
       { id: 9, category: "Химия и природа", q: "При какой температуре по шкале Цельсия закипает чистое золото при нормальном давлении?", hints: ["Плавится золото при 1064 °C, а кипит при температуре более чем в 2,5 раза выше.", "Температура кипения золота находится между 2700 °C и 3000 °C.", "Точное справочное значение — 2856 °C."], answer: 2856, unit: "°C", expl: "Температура кипения чистого золота составляет 2856 °C." },
       { id: 10, category: "История", q: "Сколько лет на самом деле длилась Столетняя война между Англией и Францией?", hints: ["Вопреки названию, она продолжалась дольше 100 лет.", "Война началась в 1337 году, а закончилась в 1453 году.", "Вычтите 1337 из 1453."], answer: 116, unit: "лет", expl: "Столетняя война с перерывами продолжалась 116 лет (1337–1453)." },
-      { id: 11, category: "Технологии", q: "В каком году было отправлено самое первое в мире SMS-сообщение («Merry Christmas»)?", hints: ["Это произошло в конце XX века в Великобритании в сети Vodafone.", "Событие случилось в первой половине 1990-х годов.", "Через год после распада СССР."], answer: 1992, unit: "год", expl: "Первое SMS было отправлено инженером Нилом Папуортом 3 декабря 1992 года." },
+      { id: 11, category: "Технологии", q: "В каком году было отправлен самое первое в мире SMS-сообщение («Merry Christmas»)?", hints: ["Это произошло в конце XX века в Великобритании в сети Vodafone.", "Событие случилось в первой половине 1990-х годов.", "Через год после распада СССР."], answer: 1992, unit: "год", expl: "Первое SMS было отправлено инженером Нилом Папуортом 3 декабря 1992 года." },
       { id: 12, category: "Литература", q: "Сколько всего пьес написал Уильям Шекспир (по современному классическому канону)?", hints: ["Помимо них он написал 154 сонета.", "Количество пьес находится между 34 и 42.", "В Первом фолио было 36 пьес, плюс «Перикл» и «Два знатных родича»."], answer: 38, unit: "пьес", expl: "В современном шекспироведении принято насчитывать 38 пьес." },
       { id: 13, category: "Океанология", q: "Какова максимальная глубина Марианской впадины (Бездна Челленджера) в метрах?", hints: ["Глубина превышает 10 километров (10 000 метров).", "Если поместить туда Эверест (8848 м), над ним останется более 2 км воды.", "Значение совсем немного не дотягивает до 11 000 метров (около 10 994 м)."], answer: 10994, unit: "м", expl: "По современным акустическим замерам глубина составляет около 10 994 м." },
       { id: 14, category: "Музыка", q: "Сколько клавиш (чёрных и белых в сумме) у стандартного современного фортепиано?", hints: ["Белых клавиш на клавиатуре 52, а чёрных — 36.", "Это двузначное число состоит из двух одинаковых цифр.", "Сложите 52 и 36."], answer: 88, unit: "клавиш", expl: "Стандартное фортепиано имеет 88 клавиш (52 белые и 36 чёрных)." },
@@ -734,7 +722,7 @@
       { id: 28, category: "Анатомия и наука", q: "Сколько зубов у взрослого человека при полном комплекте (включая все 4 зуба мудрости)?", hints: ["У детей всего 20 молочных зубов.", "На каждой челюсти у взрослого по 16 зубов.", "Умножьте 16 на 2."], answer: 32, unit: "зуба", expl: "Полный набор зубов взрослого человека составляет 32 зуба." },
       { id: 29, category: "Космос", q: "Сколько земных суток длится один год на Марсе (полный оборот вокруг Солнца)?", hints: ["Марс дальше от Солнца, чем Земля, поэтому год там длится почти в два раза дольше земного.", "Значение находится между 650 и 700 земными сутками.", "Точное число — 687 земных суток."], answer: 687, unit: "суток", expl: "Марсианский год составляет 687 земных суток." },
       { id: 30, category: "Архитектура", q: "В каком году была открыта Эйфелева башня в Париже к Всемирной выставке?", hints: ["Выставка была приурочена к столетию Великой французской революции (1789).", "Это произошло в самом конце XIX века.", "Прибавьте 100 к 1789 году."], answer: 1889, unit: "год", expl: "Эйфелева башня была торжественно открыта 31 марта 1889 года." },
-      { id: 31, category: "Кино и искусство", q: "Сколько минут длится режиссёрская версия фильма «Властелин колец: Возвращение короля»?", hints: ["Обычная театральная версия идёт 201 минуту (3 часа 21 минуту).", "Режиссёрская версия длится более 4 часов (больше 240 минут).", "Точный хронометраж расширенной версии — 251 или 263 минуты (с дополнительными титрами фан-клуба)."], answer: 251, unit: "минута", expl: "Хронометраж режиссёрской версии «Возвращения короля» составляет 251 минуту (4 часа 11 минут)." },
+      { id: 31, category: "Кино и искусство", q: "Сколько минут длится режиссёрская версия фильма «Властелин колец: Возвращение короля»?", hints: ["Обычная театральная версия идёт 201 минуту (3 часа 21 минуту).", "Режиссёрская версия длится более 4 часов (больше 240 минут).", "Точный хронометраж расширенной версии — 251 минута."], answer: 251, unit: "минута", expl: "Хронометраж режиссёрской версии «Возвращения короля» составляет 251 минуту (4 часа 11 минут)." },
       { id: 32, category: "Инженерия", q: "Какова общая длина Крымского моста (автомобильной части через Керченский пролив) в километрах?", hints: ["Это самый длинный мост в России и один из длиннейших в Европе.", "Его длина больше 15 км, но меньше 25 км.", "Двузначное число, заканчивается на 9."], answer: 19, unit: "км", expl: "Протяжённость автомобильной части Крымского моста составляет 19 километров." },
       { id: 33, category: "Спорт", q: "На какой высоте от паркета в сантиметрах висит баскетбольное кольцо по стандартам ФИБА и НБА?", hints: ["В имперской системе эта высота равна ровно 10 футам.", "Один фут — это 30,48 сантиметра.", "Умножьте 30,48 на 10 и округлите до целого числа сантиметров."], answer: 305, unit: "см", expl: "Стандартная высота баскетбольного кольца — 305 сантиметров (3,05 м)." },
       { id: 34, category: "Химия и наука", q: "Сколько всего химических элементов официально открыто и утверждено в таблице Менделеева на сегодняшний день?", hints: ["Последний открытый элемент называется Оганесон (Og).", "При жизни Менделеева было известно 63 элемента, сейчас их почти вдвое больше.", "Число находится между 115 и 120."], answer: 118, unit: "элементов", expl: "В современной периодической системе официально признано 118 элементов." },
@@ -760,10 +748,10 @@
       { id: 52, category: "География", q: "Сколько островов (крупных и мелких) входит в состав Японского архипелага по официальному пересчёту 2023 года?", hints: ["Долгое время считалось, что их около 6852, но цифровая аэрофотосъёмка увеличила это число более чем вдвое.", "Главных островов всего 4 (Хонсю, Хоккайдо, Кюсю, Сикоку).", "Общее число островов составляет чуть больше 14 000 (14 125)."], answer: 14125, unit: "островов", expl: "По данным Института геопространственной информации Японии (2023), архипелаг насчитывает 14 125 островов." },
       { id: 53, category: "Анатомия и наука", q: "Сколько литров крови в среднем перекачивает сердце взрослого человека за одни сутки (в покое)?", hints: ["За одну минуту сердце перекачивает около 5–5,5 литров крови.", "В сутках 1440 минут.", "Умножьте 5 на 1440 (получится около 7200 литров)."], answer: 7200, unit: "литров", expl: "За сутки человеческое сердце перекачивает в среднем от 7000 до 7500 (около 7200) литров крови." },
       { id: 54, category: "Космос", q: "Сколько официально подтверждённых спутников у Юпитера (по данным Международного астрономического союза на 2024–2026 гг.)?", hints: ["Четыре крупнейших (Ио, Европа, Ганимед, Каллисто) открыл ещё Галилей в 1610 году.", "Общее количество открытых спутников Юпитера приближается к сотне.", "Точное число находится между 90 и 98 (95 спутников)."], answer: 95, unit: "спутников", expl: "У Юпитера официально подтверждено 95 спутников." },
-      { id: 55, category: "Архитектура", q: "Сколько всего комнат (помещений) насчитывается в Зимнем дворце в Санкт-Петербурге?", hints: ["Это главный императорский дворец России, построенный Растрелли.", "Количество комнат превышает 1000.", "В исторических справочниках Эрмитажа традиционно указывается число 1084 комнаты (или около 1500 с учётом всех служебных помещений)."], answer: 1084, unit: "комнаты", expl: "По классической инвентаризации в Зимнем дворце насчитывается 1084 комнаты и зала." },
+      { id: 55, category: "Архитектура", q: "Сколько всего комнат (помещений) насчитывается в Зимнем дворце в Санкт-Петербурге?", hints: ["Это главный императорский дворец России, построенный Растрелли.", "Количество комнат превышает 1000.", "В исторических справочниках Эрмитажа традиционно указывается число 1084 комнаты."], answer: 1084, unit: "комнаты", expl: "По классической инвентаризации в Зимнем дворце насчитывается 1084 комнаты и зала." },
       { id: 56, category: "Кино и искусство", q: "Каковы мировые кассовые сборы первого фильма «Аватар» (2009) в миллионах долларов (с учётом повторных прокатов, округлённо)?", hints: ["«Аватар» — самый кассовый фильм в истории мирового кинематографа.", "Его сборы почти достигли отметки в 3 миллиарда долларов (3000 млн).", "Точная сумма составляет около 2923 млн долларов."], answer: 2923, unit: "млн $", expl: "Мировые сборы «Аватара» составляют около 2,923 миллиарда долларов (2923 млн $)." },
-      { id: 57, category: "Инженерия", q: "Какова длина Евротоннеля под Ла-Маншем между Францией и Великобританией в километрах (округлённо до целого)?", hints: ["Из всей длины тоннеля 38 километров проходит непосредственно под дном моря.", "Общая длина с подъездными подземными участками составляет около 50 км.", "Точное значение — 50,5 км (округлённо 50 или 51 км)."], answer: 50, unit: "км", expl: "Длина Евротоннеля под Ла-Маншем составляет 50,45 км (50 км)." },
-      { id: 58, category: "Спорт", q: "За сколько секунд Усэйн Болт пробежал 100 метров в 2009 году в Берлине, установив мировой рекорд (ответ с точностью до сотых или округлённо до 9.58)?", hints: ["Он стал первым человеком, выбежавшим из 9,6 секунды.", "Рекорд держится с чемпионата мира 2009 года.", "Девять целых и пятьдесят восемь сотых секунды."], answer: 9.58, unit: "сек", expl: "Мировой рекорд Усэйна Болта на дистанции 100 метров равен 9,58 секунды." },
+      { id: 57, category: "Инженерия", q: "Какова длина Евротоннеля под Ла-Маншем между Францией и Великобританией в километрах (округлённо до целого)?", hints: ["Из всей длины тоннеля 38 километров проходит непосредственно под дном моря.", "Общая длина с подъездными подземными участками составляет около 50 км.", "Точное значение — 50,5 км (округлённо 50 км)."], answer: 50, unit: "км", expl: "Длина Евротоннеля под Ла-Маншем составляет 50,45 км (50 км)." },
+      { id: 58, category: "Спорт", q: "За сколько секунд Усэйн Болт пробежал 100 метров в 2009 году в Берлине, установив мировой рекорд?", hints: ["Он стал первым человеком, выбежавшим из 9,6 секунды.", "Рекорд держится с чемпионата мира 2009 года.", "Девять целых и пятьдесят восемь сотых секунды."], answer: 9.58, unit: "сек", expl: "Мировой рекорд Усэйна Болта на дистанции 100 метров равен 9,58 секунды." },
       { id: 59, category: "Химия и физика", q: "Чему равен абсолютный ноль температуры по шкале Цельсия (со знаком минус)?", hints: ["При этой температуре прекращается тепловое хаотическое движение молекул.", "Ноль градусов Кельвина ниже минус 270 °C.", "Округлённо до целого числа: -273 °C."], answer: -273, unit: "°C", expl: "Абсолютный ноль составляет -273,15 °C (округлённо -273 °C)." },
       { id: 60, category: "История", q: "В каком году произошло знаменитое Ледовое побоище на Чудском озере?", hints: ["Дружина Александра Невского разбила ливонских рыцарей в XIII веке.", "Это случилось через 2 года после Невской битвы (1240).", "5 апреля 1242 года."], answer: 1242, unit: "год", expl: "Ледовое побоище произошло 5 апреля 1242 года." },
       { id: 61, category: "Технологии", q: "В каком году была основана компания Google Ларри Пейджем и Сергеем Брином?", hints: ["Поисковик вырос из университетского проекта BackRub в Стэнфорде в конце 1990-х.", "В том же году во Франции прошёл чемпионат мира по футболу, а в России случился дефолт.", "4 сентября 1998 года."], answer: 1998, unit: "год", expl: "Компания Google была официально зарегистрирована 4 сентября 1998 года." },
@@ -778,7 +766,7 @@
       { id: 70, category: "Автомобили", q: "В каком году Карл Бенц получил патент №37435 на свой первый в мире автомобиль с бензиновым двигателем (Benz Patent-Motorwagen)?", hints: ["Это произошло в Германии в 1880-х годах.", "За три года до открытия Эйфелевой башни (1889).", "29 января 1886 года."], answer: 1886, unit: "год", expl: "29 января 1886 года Карл Бенц получил патент на первый автомобиль в мире." },
       { id: 71, category: "Древний мир", q: "Сколько воинов входило в личный отряд спартанского царя Леонида в битве при Фермопилах (по классическому преданию)?", hints: ["Вместе с ними сражались и другие греческие союзники, но в легенду вошёл именно отряд спартанцев.", "По этому событию снят знаменитый голливудский блокбастер Зака Снайдера.", "Три сотни."], answer: 300, unit: "спартанцев", expl: "В историю вошёл подвиг 300 спартанцев царя Леонида в Фермопильском ущелье (480 г. до н. э.)." },
       { id: 72, category: "Финансы и экономика", q: "Какова масса одной стандартной банковской тройской унции золота в граммах (округлённо до целого)?", hints: ["Обычная торговая унция весит 28,35 грамма, но тройская унция для драгоценных металлов тяжелее.", "Точное значение — 31,1034768 грамма.", "Округлите 31,1 до ближайшего целого числа."], answer: 31, unit: "грамм", expl: "Одна тройская унция равна 31,1 грамма (округлённо 31 г)." },
-      { id: 73, category: "Авиация", q: "Сколько секунд длился самый первый управляемый полёт самолёта братьев Райт «Флайер-1» 17 декабря 1903 года?", hints: ["Орвилл Райт пролетел тогда расстояние всего в 36,5 метра.", "Полёт длился меньше полуминуты.", "Точное время первой попытки — ровно 12 секунд (четвёртая попытка в тот же день длилась 59 с)."], answer: 12, unit: "секунд", expl: "Первый в истории полёт самолёта братьев Райт длился 12 секунд." },
+      { id: 73, category: "Авиация", q: "Сколько секунд длился самый первый управляемый полёт самолёта братьев Райт «Флайер-1» 17 декабря 1903 года?", hints: ["Орвилл Райт пролетел тогда расстояние всего в 36,5 метра.", "Полёт длился меньше полуминуты.", "Точное время первой попытки — ровно 12 секунд."], answer: 12, unit: "секунд", expl: "Первый в истории полёт самолёта братьев Райт длился 12 секунд." },
       { id: 74, category: "Мировая культура", q: "В каком году картина Леонардо да Винчи «Мона Лиза» была похищена из Лувра итальянским стекольщиком Винченцо Перуджей?", hints: ["Кража века произошла в начале XX века, за год до гибели «Титаника» (1912).", "Картину искали два года и нашли во Флоренции в 1913 году.", "21 августа 1911 года."], answer: 1911, unit: "год", expl: "«Мона Лиза» была похищена из Лувра 21 августа 1911 года." },
       { id: 75, category: "География стран", q: "Сколько государств в мире официально не имеют выхода к открытому морю (Мировому океану)?", hints: ["Больше всего таких стран находится в Африке (16) и Европе (14).", "Среди них — Швейцария, Австрия, Казахстан, Монголия, Боливия.", "Общее число таких стран в мире — 44."], answer: 44, unit: "страны", expl: "В мире насчитывается 44 государства, не имеющих выхода к Мировому океану." },
 
@@ -786,7 +774,7 @@
       { id: 76, category: "История и космос", q: "В каком году Советский Союз запустил первый в истории искусственный спутник Земли («Спутник-1»)?", hints: ["Запуск открыл космическую эру человечества за 4 года до полёта Гагарина (1961).", "Это произошло 4 октября во второй половине 1950-х годов.", "Вычтите 4 из 1961."], answer: 1957, unit: "год", expl: "Первый искусственный спутник Земли был запущен 4 октября 1957 года." },
       { id: 77, category: "География", q: "На сколько метров ниже уровня Мирового океана находится побережье Мёртвого моря (самая низкая точка суши)?", hints: ["Уровень воды в Мёртвом море постепенно падает и уже опустился ниже 400 метров.", "Значение находится между 420 и 440 метрами ниже уровня моря.", "В современных атласах указывается отметка около 430 метров."], answer: 430, unit: "м", expl: "Берег Мёртвого моря находится примерно на 430 метров ниже уровня моря." },
       { id: 78, category: "Анатомия и наука", q: "Какова примерная масса головного мозга взрослого человека в граммах (среднее значение)?", hints: ["Мозг составляет около 2% от общей массы тела человека.", "Его вес больше 1 килограмма (1000 г), но меньше 1,8 килограмма.", "Среднее анатомическое значение — около 1350–1400 граммов."], answer: 1400, unit: "г", expl: "Средняя масса головного мозга взрослого человека составляет около 1350–1400 граммов." },
-      { id: 79, category: "Космос", q: "Сколько миллиардов лет составляет возраст нашей Вселенной по современным астрофизическим расчётам (округлённо до десятых или целого)?", hints: ["Возраст Солнечной системы — около 4,5 миллиарда лет, а Вселенная втрое старше.", "По данным космического телескопа «Планк», значение находится между 13 и 14 миллиардами лет.", "Точное значение — 13,8 миллиарда лет."], answer: 13.8, unit: "млрд лет", expl: "Возраст Вселенной от Большого взрыва оценивается в 13,799 (13,8) миллиарда лет." },
+      { id: 79, category: "Космос", q: "Сколько миллиардов лет составляет возраст нашей Вселенной по современным астрофизическим расчётам?", hints: ["Возраст Солнечной системы — около 4,5 миллиарда лет, а Вселенная втрое старше.", "По данным космического телескопа «Планк», значение находится между 13 и 14 миллиардами лет.", "Точное значение — 13,8 миллиарда лет."], answer: 13.8, unit: "млрд лет", expl: "Возраст Вселенной от Большого взрыва оценивается в 13,799 (13,8) миллиарда лет." },
       { id: 80, category: "Архитектура", q: "Сколько куполов (глав) венчают Покровский собор (Храм Василия Блаженного) на Красной площади в Москве?", hints: ["Девять куполов соответствуют первоначальным престолам, плюс купол над приделом Василия Блаженного и над колокольней.", "Их больше 8, но меньше 13.", "Всего у собора 11 куполов."], answer: 11, unit: "куполов", expl: "Храм Василия Блаженного венчают 11 куполов (10 над церквями и 1 над колокольней)." },
       { id: 81, category: "Кино и искусство", q: "В каком году в Париже на бульваре Капуцинок состоялся первый коммерческий киносеанс братьев Люмьер?", hints: ["Это произошло в самом конце XIX века, ровно за 5 лет до наступления 1900 года.", "В том же году Вильгельм Рентген открыл рентгеновские лучи, а Попов продемонстрировал радио.", "28 декабря 1895 года."], answer: 1895, unit: "год", expl: "Первый платный киносеанс братьев Люмьер прошёл 28 декабря 1895 года." },
       { id: 82, category: "Инженерия", q: "Какова протяжённость Панамского канала, соединяющего Тихий и Атлантический океаны, в километрах (округлённо до целого)?", hints: ["Суэцкий канал в Египте имеет длину 160 км, а Панамский канал примерно вдвое короче.", "Длина материковой части канала — 65 км, а с морскими подходными каналами — около 82 км.", "Число между 80 и 83 км."], answer: 82, unit: "км", expl: "Полная длина Панамского канала составляет 81,6 (округлённо 82) километра." },
@@ -810,12 +798,27 @@
       { id: 100, category: "География стран", q: "Сколько официальных языков признано в Организации Объединённых Наций (ООН)?", hints: ["В этот список входят английский, французский, испанский, русский, арабский и китайский.", "На всех этих языках публикуются официальные документы ООН.", "Однозначное число меньше 8."], answer: 6, unit: "языков", expl: "В ООН установлено 6 официальных языков: английский, арабский, испанский, китайский, русский и французский." }
     ];
 
+    // Конфигурация STUN + TURN ретрансляторов (позволяет подключаться через мобильный интернет 4G/LTE и строгие роутеры)
     const PEER_CONFIG = {
       config: {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
           { urls: 'stun:stun1.l.google.com:19302' },
-          { urls: 'stun:stun2.l.google.com:19302' }
+          {
+            urls: 'turn:openrelay.metered.ca:80',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          },
+          {
+            urls: 'turn:openrelay.metered.ca:443?transport=tcp',
+            username: 'openrelayproject',
+            credential: 'openrelayproject'
+          }
         ]
       }
     };
@@ -870,15 +873,19 @@
     };
 
     // =========================================================================
-    // МУЛЬТИПЛЕЕР: СОСТОЯНИЕ ИГРЫ И СИНХРОНИЗАЦИЯ
+    // МУЛЬТИПЛЕЕР: ТРОЙНОЙ ДВИЖОК СИНХРОНИЗАЦИИ (WebSocket MQTT + PeerJS + Local)
     // =========================================================================
     let mpRole = null;
     let roomCode = null;
     let peer = null;
     let hostConnections = {};
     let playerConn = null;
+    let mqttClient = null;
     let bcChannel = null;
-    let myPlayerId = 'p_' + Math.random().toString(36).substring(2, 9);
+    let playerJoinInterval = null;
+    let playerConnectedFlag = false;
+    let myPlayerId = localStorage.getItem('ls_saved_pid') || ('p_' + Math.random().toString(36).substring(2, 9));
+    localStorage.setItem('ls_saved_pid', myPlayerId);
     let myPlayerName = '';
     let hostPeekAnswers = false;
 
@@ -886,8 +893,8 @@
       roomCode: '',
       startingChips: 1000,
       ante: 50,
-      packIndex: 0, // 0..3 (по 25 вопросов в паке)
-      qIndex: 0,    // 0..99 глобальный индекс вопроса в QUESTIONS
+      packIndex: 0,
+      qIndex: 0,
       revealedHints: [false, false, false],
       answerRevealed: false,
       pot: 0,
@@ -896,7 +903,6 @@
       players: {}
     };
 
-    // Обновление выпадающего списка вопросов для выбранного пака у Ведущего
     function populateHostQuestionSelect() {
       const sel = document.getElementById('host-question-select');
       if (!sel) return;
@@ -911,7 +917,6 @@
       sel.value = gameState.qIndex;
     }
 
-    // Отрисовка каталога из 100 вопросов с фильтрацией по пакам
     window.filterCatalogByPack = function(packIdx) {
       [0, 1, 2, 3].forEach(i => {
         const btn = document.getElementById('cat-pack-btn-' + i);
@@ -974,6 +979,52 @@
       }
     };
 
+    // --- Канал 1: WebSocket MQTT Relay (работает на любых мобильных сетях и Wi-Fi) ---
+    function setupMqttRelay(code, role) {
+      if (typeof mqtt === 'undefined') {
+        setTimeout(() => setupMqttRelay(code, role), 500);
+        return;
+      }
+      try {
+        if (mqttClient) mqttClient.end(true);
+        const brokers = [
+          'wss://broker.emqx.io:8084/mqtt',
+          'wss://broker.hivemq.com:8884/mqtt'
+        ];
+        mqttClient = mqtt.connect(brokers[0], {
+          keepalive: 30,
+          reconnectPeriod: 2000,
+          connectTimeout: 8000
+        });
+
+        const topicToHost = `lockstock_quiz_v2/${code}/to_host`;
+        const topicToPlayers = `lockstock_quiz_v2/${code}/to_players`;
+
+        mqttClient.on('connect', () => {
+          if (role === 'host') {
+            mqttClient.subscribe(topicToHost);
+            document.getElementById('host-net-status').innerHTML =
+              `<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span> Онлайн готов (Код ${code})`;
+            // Сразу публикуем текущее состояние с флагом retain, чтобы любой вошедший игрок мгновенно его получил
+            mqttClient.publish(topicToPlayers, JSON.stringify({ type: 'STATE_SYNC', state: gameState }), { qos: 0, retain: true });
+          } else if (role === 'player') {
+            mqttClient.subscribe(topicToPlayers);
+            mqttClient.publish(topicToHost, JSON.stringify({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: myPlayerName }));
+          }
+        });
+
+        mqttClient.on('message', (topic, payload) => {
+          try {
+            const data = JSON.parse(payload.toString());
+            handleIncomingMessage(data, null);
+          } catch (e) {}
+        });
+      } catch (err) {
+        console.warn('MQTT relay fallback:', err);
+      }
+    }
+
+    // --- Канал 2: Локальный BroadcastChannel + localStorage ---
     function setupBroadcastChannel(code) {
       try {
         if (bcChannel) bcChannel.close();
@@ -1002,22 +1053,34 @@
       } catch (e) {}
     }
 
+    // Отправка действия от Игрока к Ведущему по всем доступным каналам одновременно
     function sendToHost(msg) {
       if (bcChannel) {
         try { bcChannel.postMessage(msg); } catch (e) {}
       }
       sendLocalFallback(msg);
+      if (mqttClient && mqttClient.connected) {
+        try {
+          mqttClient.publish(`lockstock_quiz_v2/${roomCode}/to_host`, JSON.stringify(msg));
+        } catch (e) {}
+      }
       if (playerConn && playerConn.open) {
         try { playerConn.send(msg); } catch (e) {}
       }
     }
 
+    // Рассылка состояния стола от Ведущего всем Игрокам по всем каналам одновременно
     function broadcastStateFromHost() {
       const packet = { type: 'STATE_SYNC', state: gameState };
       if (bcChannel) {
         try { bcChannel.postMessage(packet); } catch (e) {}
       }
       sendLocalFallback(packet);
+      if (mqttClient && mqttClient.connected) {
+        try {
+          mqttClient.publish(`lockstock_quiz_v2/${roomCode}/to_players`, JSON.stringify(packet), { qos: 0, retain: true });
+        } catch (e) {}
+      }
       Object.values(hostConnections).forEach(conn => {
         if (conn && conn.open) {
           try { conn.send(packet); } catch (e) {}
@@ -1110,10 +1173,21 @@
         }
       }
       else if (mpRole === 'player') {
-        if (data.type === 'STATE_SYNC') {
+        if (data.type === 'STATE_SYNC' && data.state) {
           gameState = data.state;
+          playerConnectedFlag = true;
           const dot = document.getElementById('player-conn-dot');
           if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+
+          // Если ведущий ещё не зарегистрировал нас в списке (например, вошли чуть раньше), отправляем повторный запрос
+          if (!gameState.players || !gameState.players[myPlayerId]) {
+            sendToHost({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: myPlayerName });
+          } else {
+            if (playerJoinInterval) {
+              clearInterval(playerJoinInterval);
+              playerJoinInterval = null;
+            }
+          }
           renderPlayerUI();
         }
       }
@@ -1155,10 +1229,6 @@
         document.getElementById('host-pack-select').value = selectedPack;
         populateHostQuestionSelect();
 
-        if (window.location.protocol === 'file:') {
-          document.getElementById('local-file-warning').classList.remove('hidden');
-        }
-
         const baseUrl = window.location.href.split('?')[0];
         const inviteUrl = `${baseUrl}?room=${roomCode}`;
         document.getElementById('host-room-code-badge').textContent = roomCode;
@@ -1171,12 +1241,12 @@
         }
 
         setupBroadcastChannel(roomCode);
+        setupMqttRelay(roomCode, 'host');
+        initHostPeerWhenReady(roomCode);
+
         renderHostUI();
         playTone(580, 0.12);
-
-        initHostPeerWhenReady(roomCode);
       } catch (err) {
-        console.error('Ошибка при запуске режима ведущего:', err);
         alert('Произошла ошибка запуска: ' + err.message);
       }
     };
@@ -1186,9 +1256,6 @@
       if (typeof Peer === 'undefined') {
         if (attempt < 15) {
           setTimeout(() => initHostPeerWhenReady(code, attempt + 1), 600);
-        } else {
-          document.getElementById('host-net-status').innerHTML =
-            `<span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Локальный режим (Код ${code})`;
         }
         return;
       }
@@ -1206,9 +1273,7 @@
             conn.send({ type: 'STATE_SYNC', state: gameState });
           });
         });
-      } catch (err) {
-        console.warn('PeerJS init warning:', err);
-      }
+      } catch (err) {}
     }
 
     window.copyInviteLink = function() {
@@ -1228,7 +1293,6 @@
       window.open(url, '_blank');
     };
 
-    // Смена пака у Ведущего
     window.hostSelectPack = function(packIdx) {
       gameState.packIndex = Number(packIdx);
       gameState.qIndex = gameState.packIndex * 25;
@@ -1243,7 +1307,6 @@
       window.hostStartNewRound();
     };
 
-    // Листание вопросов внутри текущего пака (из 25 вопросов)
     window.hostChangeQuestion = function(delta) {
       const startIdx = gameState.packIndex * 25;
       const offsetInPack = ((gameState.qIndex - startIdx) + delta + 25) % 25;
@@ -1482,7 +1545,7 @@
     }
 
     // =========================================================================
-    // ЗАПУСК СЕССИИ ИГРОКА (ПО ССЫЛКЕ ИЛИ КОДУ КОМНАТЫ)
+    // ЗАПУСК СЕССИИ ИГРОКА (С АВТО-ПЕРЕПОДКЛЮЧЕНИЕМ И ТРОЙНЫМ КАНАЛОМ)
     // =========================================================================
     window.startPlayerSession = function() {
       const nameInput = document.getElementById('join-player-name').value.trim();
@@ -1500,6 +1563,7 @@
       mpRole = 'player';
       roomCode = codeInput;
       myPlayerName = nameInput;
+      playerConnectedFlag = false;
 
       document.getElementById('mp-lobby-select').classList.add('hidden');
       document.getElementById('mp-host-dashboard').classList.add('hidden');
@@ -1508,10 +1572,26 @@
       document.getElementById('player-my-name').textContent = nameInput;
       document.getElementById('player-room-badge').textContent = `Комната #${roomCode}`;
 
+      // Запускаем все 3 транспорта параллельно
       setupBroadcastChannel(roomCode);
-      sendToHost({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: nameInput });
-
+      setupMqttRelay(roomCode, 'player');
       initPlayerPeerWhenReady(roomCode, nameInput);
+
+      // Отправляем запрос на вход и повторяем каждые 2.5 секунды, пока ведущий не пришлёт синхронизацию
+      sendToHost({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: nameInput });
+      if (playerJoinInterval) clearInterval(playerJoinInterval);
+      playerJoinInterval = setInterval(() => {
+        if (!gameState.players || !gameState.players[myPlayerId]) {
+          sendToHost({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: myPlayerName });
+        }
+      }, 2500);
+    };
+
+    window.manualReconnectPlayer = function() {
+      document.getElementById('player-status-badge').textContent = '🔄 Переподключение к столу ведущего...';
+      setupMqttRelay(roomCode, 'player');
+      initPlayerPeerWhenReady(roomCode, myPlayerName);
+      sendToHost({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: myPlayerName });
     };
 
     function initPlayerPeerWhenReady(code, nameInput, attempt = 0) {
@@ -1528,14 +1608,11 @@
         peer.on('open', () => {
           playerConn = peer.connect('lockstock-room-' + code, { reliable: true });
           playerConn.on('open', () => {
-            document.getElementById('player-status-badge').textContent = '🟢 Подключено к столу ведущего';
             playerConn.send({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: nameInput });
           });
           playerConn.on('data', (data) => handleIncomingMessage(data, playerConn));
         });
-      } catch (e) {
-        console.warn('PeerJS player error:', e);
-      }
+      } catch (e) {}
     }
 
     window.playerSubmitGuess = function() {
@@ -1574,7 +1651,7 @@
 
     function renderPlayerUI() {
       const q = QUESTIONS[gameState.qIndex] || QUESTIONS[0];
-      const me = gameState.players[myPlayerId];
+      const me = gameState.players ? gameState.players[myPlayerId] : null;
       const inPackNum = (gameState.qIndex % 25) + 1;
 
       document.getElementById('player-q-cat').textContent = `Пак ${(gameState.packIndex || 0) + 1} • ${q.category}`;
@@ -1587,7 +1664,7 @@
         document.getElementById('player-my-bet').textContent = me.currentBet;
         const toCall = Math.max(0, gameState.maxBet - me.currentBet);
         document.getElementById('player-to-call').textContent = toCall;
-        document.getElementById('player-status-badge').textContent = `🟢 ${me.lastAction}`;
+        document.getElementById('player-status-badge').textContent = `🟢 Подключено • ${me.lastAction}`;
         document.getElementById('btn-player-call').textContent =
           toCall > 0 ? `✅ Уравнять (+${toCall} 🪙)` : '✅ Чек (Без доплаты)';
         if (me.guess === null) {
@@ -1598,7 +1675,7 @@
       const hintsBox = document.getElementById('player-hints-container');
       const openedHintsHtml = [];
       for (let i = 0; i < 3; i++) {
-        if (gameState.revealedHints[i]) {
+        if (gameState.revealedHints && gameState.revealedHints[i]) {
           openedHintsHtml.push(`
             <div class="bg-emerald-950/90 border border-amber-400/60 rounded-xl p-3 text-xs sm:text-sm text-emerald-100">
               <strong class="text-amber-400">💡 Подсказка ${i + 1}:</strong> ${q.hints[i]}
@@ -1625,7 +1702,7 @@
       }
 
       const tableEl = document.getElementById('player-table-list');
-      tableEl.innerHTML = Object.values(gameState.players).map(p => `
+      tableEl.innerHTML = Object.values(gameState.players || {}).map(p => `
         <div class="flex items-center justify-between bg-black/35 px-3 py-2 rounded-lg border border-emerald-800/60">
           <div>
             <span class="font-bold text-white">${p.name}</span>
@@ -1639,7 +1716,9 @@
     }
 
     window.leaveMultiplayer = function() {
+      if (playerJoinInterval) clearInterval(playerJoinInterval);
       try { if (peer) peer.destroy(); } catch (e) {}
+      try { if (mqttClient) mqttClient.end(true); } catch (e) {}
       try { if (bcChannel) bcChannel.close(); } catch (e) {}
       mpRole = null;
       document.getElementById('mp-lobby-select').classList.remove('hidden');
@@ -1655,7 +1734,7 @@
     };
 
     // =========================================================================
-    // ОДИНОЧНЫЙ РЕЖИМ С ИИ (Стол с ИИ) С ПОДДЕРЖКОЙ 4 ПАКОВ
+    // ОДИНОЧНЫЙ РЕЖИМ С ИИ (Стол с ИИ)
     // =========================================================================
     let soloPack = 0;
     let soloIdx = 0;
@@ -1737,7 +1816,6 @@
       initSoloMode();
     };
 
-    // Первичная инициализация
     populateHostQuestionSelect();
     window.filterCatalogByPack(0);
     initSoloMode();
