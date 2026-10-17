@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ЛОК СТОК — Ставка на знания | 100 вопросов (4 пака)</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Асинхронная загрузка PeerJS через быстрый jsDelivr -->
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js" async defer></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,9 +96,9 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="font-display font-black text-lg sm:text-xl tracking-wider text-white">ЛОК СТОК</span>
-            <span class="text-[10px] sm:text-xs uppercase font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Ставка на знания</span>
+            <span class="text-[10px] sm:text-xs uppercase font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">100 вопросов • 4 пака</span>
           </div>
-          <p class="text-[11px] text-emerald-300/80 hidden sm:block">Побеждает не самый умный, а самый уверенный • 4 пака по 25 вопросов</p>
+          <p class="text-[11px] text-emerald-300/80 hidden sm:block">Побеждает не самый умный, а самый уверенный</p>
         </div>
       </div>
 
@@ -143,13 +142,13 @@
       <div id="mp-lobby-select" class="max-w-4xl mx-auto bg-emerald-950/60 border border-emerald-800/70 rounded-3xl p-6 sm:p-8 shadow-2xl">
         <div class="text-center max-w-2xl mx-auto mb-8">
           <span class="inline-block text-xs uppercase font-extrabold tracking-widest px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 mb-3">
-            Мультиплеер по ссылке • 4 игровых пака по 25 вопросов
+            Мультиплеер по ссылке в реальном времени
           </span>
           <h1 id="lobby-main-heading" class="font-display font-black text-2xl sm:text-4xl text-white mb-2">
             Выберите свою роль за столом
           </h1>
           <p id="lobby-sub-heading" class="text-sm text-emerald-200/80">
-            Создайте игру как <strong>Ведущий</strong>, выберите любой из 4 паков вопросов и отправьте ссылку друзьям, либо подключитесь как <strong>Игрок</strong> со своего смартфона или ПК.
+            Создайте игру как <strong>Ведущий</strong> (выбрав один из 4 паков по 25 вопросов) и отправьте ссылку друзьям, либо подключитесь как <strong>Игрок</strong>.
           </p>
         </div>
 
@@ -162,16 +161,16 @@
               </div>
               <h2 class="font-display font-bold text-xl text-white mb-2">Роль Ведущего</h2>
               <p class="text-xs sm:text-sm text-emerald-200/80 mb-4">
-                Вы управляете игрой: выбираете пак из 25 вопросов, создаёте ссылку-приглашение, открываете 3 подсказки и нажимаете «Показать ответ». Очки и банк рассчитываются автоматически!
+                Вы управляете игрой: выбираете пак вопросов, создаёте ссылку-приглашение, открываете 3 подсказки и кнопку «Показать ответ». Очки считаются автоматически!
               </p>
               <div class="space-y-3 mb-5 bg-black/30 p-3.5 rounded-xl border border-emerald-800/60">
                 <div>
-                  <label class="block text-xs text-amber-300 mb-1 font-bold">Выберите игровой пак (25 вопросов):</label>
-                  <select id="lobby-pack-select" class="w-full bg-emerald-950 border border-amber-500/60 rounded-lg px-3 py-2 text-xs sm:text-sm text-white font-bold focus:outline-none focus:border-amber-400">
-                    <option value="0">📦 Пак #1: Классический (25 вопросов)</option>
-                    <option value="1">🌍 Пак #2: Мировой масштаб (25 вопросов)</option>
-                    <option value="2">🚀 Пак #3: Наука, кино и рекорды (25 вопросов)</option>
-                    <option value="3">👑 Пак #4: Эрудит-Премиум (25 вопросов)</option>
+                  <label class="block text-xs text-amber-300 mb-1 font-bold">Выберите игровой пак (по 25 вопросов):</label>
+                  <select id="host-init-pack" class="w-full bg-emerald-950 border border-amber-500/60 rounded-lg px-3 py-2 text-xs sm:text-sm text-white font-bold focus:outline-none focus:border-amber-400">
+                    <option value="0">📦 Пак 1: Классический (Вопросы 1–25)</option>
+                    <option value="1">📦 Пак 2: Мировой масштаб (Вопросы 26–50)</option>
+                    <option value="2">📦 Пак 3: Наука и рекорды (Вопросы 51–75)</option>
+                    <option value="3">📦 Пак 4: Эрудит-мастер (Вопросы 76–100)</option>
                   </select>
                 </div>
                 <div class="grid grid-cols-2 gap-2.5">
@@ -231,7 +230,7 @@
         <!-- Local File Warning Banner -->
         <div id="local-file-warning" class="hidden bg-amber-950/80 border border-amber-500/60 rounded-2xl p-3.5 text-xs text-amber-200 flex items-center justify-between gap-3">
           <div>
-            ⚠️ <strong>Внимание:</strong> Вы открыли файл локально с компьютера (<code>file://</code>). В таком режиме вы можете протестировать игру в соседних вкладках этого браузера. Чтобы друзья зашли со своих телефонов через интернет, откройте сайт через <strong>GitHub Pages</strong>.
+            ⚠️ <strong>Внимание:</strong> Вы открыли файл локально с компьютера (<code>file://</code>). Для игры с друзьями по интернету используйте вашу ссылку на <strong>GitHub Pages</strong>.
           </div>
         </div>
 
@@ -252,7 +251,7 @@
               📷 QR-код
             </button>
             <button type="button" onclick="window.openTestPlayerTab()" class="px-3 py-1.5 rounded-xl bg-indigo-600/80 hover:bg-indigo-500 border border-indigo-400/40 text-xs font-semibold text-white transition" title="Открыть экран игрока в соседней вкладке для проверки">
-              🧪 Тест: открыть игрока в новой вкладке
+              🧪 Тест: открыть игрока
             </button>
           </div>
 
@@ -269,33 +268,31 @@
 
         <!-- Main Host Studio Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          <!-- Left / Center: Pack & Question Selector, 3 Hint Buttons, Show Answer Button, Poker Table -->
+          <!-- Left / Center: Question, 3 Hint Buttons, Show Answer Button, Poker Table -->
           <div class="lg:col-span-8 space-y-5">
             <!-- Pack & Question Control Header -->
-            <div class="bg-emerald-950/80 border border-emerald-800/80 rounded-2xl p-4 space-y-3">
-              <div class="flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold text-amber-300 uppercase">Пак:</span>
-                  <select id="host-pack-select" onchange="window.hostSelectPack(this.value)" class="bg-emerald-900 border border-amber-500/60 text-amber-300 text-xs sm:text-sm font-bold rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber-400">
-                    <option value="0">📦 Пак #1: Классический (25 вопр.)</option>
-                    <option value="1">🌍 Пак #2: Мировой масштаб (25 вопр.)</option>
-                    <option value="2">🚀 Пак #3: Наука, кино и рекорды (25 вопр.)</option>
-                    <option value="3">👑 Пак #4: Эрудит-Премиум (25 вопр.)</option>
-                  </select>
-                </div>
-                <button type="button" onclick="window.hostStartNewRound()" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition">
-                  🔄 Перезапустить раунд (Собрать анте)
+            <div class="bg-emerald-950/80 border border-emerald-800/80 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-wrap items-center gap-2">
+                <!-- Pack Selector -->
+                <select id="host-pack-select" onchange="window.hostSelectPack(this.value)" class="bg-amber-500/20 border border-amber-500/50 text-amber-300 text-xs font-bold rounded-lg px-2.5 py-1.5 focus:outline-none focus:border-amber-400">
+                  <option value="0" class="bg-emerald-950 text-white">📦 Пак 1 (1–25)</option>
+                  <option value="1" class="bg-emerald-950 text-white">📦 Пак 2 (26–50)</option>
+                  <option value="2" class="bg-emerald-950 text-white">📦 Пак 3 (51–75)</option>
+                  <option value="3" class="bg-emerald-950 text-white">📦 Пак 4 (76–100)</option>
+                </select>
+
+                <button type="button" onclick="window.hostChangeQuestion(-1)" class="px-2.5 py-1.5 rounded-lg bg-emerald-900 hover:bg-emerald-800 text-white text-xs font-bold border border-emerald-700">
+                  ◀ Пред.
+                </button>
+                <select id="host-question-select" onchange="window.hostSelectQuestion(this.value)" class="bg-emerald-900 border border-emerald-700 text-white text-xs sm:text-sm font-semibold rounded-lg px-2.5 py-1.5 max-w-[220px] sm:max-w-xs focus:outline-none focus:border-amber-400">
+                </select>
+                <button type="button" onclick="window.hostChangeQuestion(1)" class="px-2.5 py-1.5 rounded-lg bg-emerald-900 hover:bg-emerald-800 text-white text-xs font-bold border border-emerald-700">
+                  След. ▶
                 </button>
               </div>
-
-              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-emerald-800/60">
-                <button type="button" onclick="window.hostChangeQuestion(-1)" class="px-3 py-1.5 rounded-lg bg-emerald-900 hover:bg-emerald-800 text-white text-xs font-bold border border-emerald-700">
-                  ◀ Пред. вопрос
-                </button>
-                <select id="host-question-select" onchange="window.hostSelectQuestion(this.value)" class="flex-1 min-w-[220px] bg-emerald-900 border border-emerald-700 text-white text-xs sm:text-sm font-semibold rounded-lg px-3 py-1.5 focus:outline-none focus:border-amber-400">
-                </select>
-                <button type="button" onclick="window.hostChangeQuestion(1)" class="px-3 py-1.5 rounded-lg bg-emerald-900 hover:bg-emerald-800 text-white text-xs font-bold border border-emerald-700">
-                  След. вопрос ▶
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="window.hostStartNewRound()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow transition">
+                  🔄 Перезапустить раунд
                 </button>
               </div>
             </div>
@@ -304,16 +301,16 @@
             <div class="felt-table rounded-3xl p-5 sm:p-7 relative overflow-hidden">
               <!-- Top Status & Pot -->
               <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-emerald-800/60">
-                <div class="flex flex-wrap items-center gap-2">
-                  <span id="host-pack-badge" class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-emerald-800/80 text-emerald-200 border border-emerald-600/50">
-                    Пак #1
+                <div>
+                  <span id="host-pack-badge" class="text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-emerald-900/90 text-emerald-200 border border-emerald-700 mr-1.5">
+                    Пак 1
                   </span>
                   <span id="host-q-category" class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
                     Категория
                   </span>
-                  <span id="host-round-stage-badge" class="text-xs font-semibold text-emerald-200">
+                  <div id="host-round-stage-badge" class="mt-2 text-xs font-semibold text-emerald-200">
                     Этап: Ввод ответов и ставок
-                  </span>
+                  </div>
                 </div>
                 <div class="flex items-center gap-4">
                   <div class="bg-black/50 border border-amber-500/50 rounded-2xl px-4 py-2 text-center gold-glow">
@@ -329,7 +326,7 @@
 
               <!-- Question Text -->
               <div class="bg-black/35 border border-emerald-800/80 rounded-2xl p-5 mb-5">
-                <div class="text-xs text-emerald-400 font-bold uppercase mb-1">Вопрос <span id="host-q-num">1</span> из 25</div>
+                <div class="text-xs text-emerald-400 font-bold uppercase mb-1">Вопрос #<span id="host-q-num">1</span> <span id="host-q-inpack-num" class="text-emerald-300/70 font-normal">(1 из 25 в паке)</span></div>
                 <h2 id="host-q-text" class="font-display font-extrabold text-xl sm:text-2xl text-white leading-snug">
                   Загрузка вопроса...
                 </h2>
@@ -472,4 +469,1290 @@
         </div>
 
         <!-- Live Question & Opened Hints on Player Phone -->
-        <div class="felt-table rounded-2xl p-4 sm:p
+        <div class="felt-table rounded-2xl p-4 sm:p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <span id="player-q-cat" class="text-[11px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Вопрос</span>
+            <span id="player-q-num" class="text-xs text-emerald-300 font-bold">#1</span>
+          </div>
+          <h2 id="player-q-text" class="font-display font-bold text-base sm:text-lg text-white leading-snug">
+            Ожидание синхронизации вопроса с экраном ведущего...
+          </h2>
+
+          <!-- Hints Appearing Live -->
+          <div id="player-hints-container" class="space-y-2 pt-2">
+          </div>
+
+          <!-- Revealed Answer & Winner Result on Player Phone -->
+          <div id="player-result-box" class="hidden mt-3 bg-black/60 border-2 border-amber-400 rounded-xl p-4 space-y-2">
+            <div class="text-xs uppercase font-bold text-amber-300">Правильный ответ:</div>
+            <div id="player-revealed-answer" class="font-display font-black text-2xl text-white"></div>
+            <div id="player-winner-text" class="text-xs sm:text-sm font-bold text-emerald-300"></div>
+            <p id="player-revealed-expl" class="text-xs text-emerald-100/80 pt-1 border-t border-emerald-800"></p>
+          </div>
+        </div>
+
+        <!-- Step 1: Player Numerical Guess Input -->
+        <div id="player-guess-panel" class="bg-emerald-950/90 border border-emerald-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-emerald-200">1. Ваш числовой ответ:</label>
+            <span id="player-guess-saved-badge" class="text-xs font-semibold text-amber-300">Не отправлен</span>
+          </div>
+          <div class="flex gap-2">
+            <input id="player-guess-input" type="number" step="any" placeholder="Введите число..." class="flex-1 bg-black/50 border border-emerald-700 rounded-xl px-3.5 py-2.5 text-base font-bold text-white focus:outline-none focus:border-amber-400" />
+            <button type="button" onclick="window.playerSubmitGuess()" class="px-5 py-2.5 rounded-xl font-display font-bold text-xs sm:text-sm bg-emerald-600 hover:bg-emerald-500 text-white shadow transition">
+              Отправить ответ
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Player Betting Controls -->
+        <div id="player-betting-panel" class="bg-emerald-950/90 border border-amber-500/40 rounded-2xl p-4 space-y-3 shadow-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-300">2. Управление ставкой:</span>
+            <span id="player-bet-hint" class="text-[11px] text-emerald-300">Ставки списываются сразу в банк</span>
+          </div>
+
+          <!-- Quick Raise Chips -->
+          <div class="grid grid-cols-4 gap-2">
+            <button type="button" onclick="window.playerMakeBet('raise', 50)" class="py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 font-bold text-xs transition">
+              +50 🪙
+            </button>
+            <button type="button" onclick="window.playerMakeBet('raise', 100)" class="py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 font-bold text-xs transition">
+              +100 🪙
+            </button>
+            <button type="button" onclick="window.playerMakeBet('raise', 250)" class="py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 font-bold text-xs transition">
+              +250 🪙
+            </button>
+            <button type="button" onclick="window.playerMakeBet('allin', 0)" class="py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-400/50 text-rose-300 font-bold text-xs transition">
+              Ва-банк
+            </button>
+          </div>
+
+          <!-- Custom Raise Input -->
+          <div class="flex gap-2">
+            <input id="player-custom-bet" type="number" min="10" step="10" placeholder="Своя сумма повышения..." class="flex-1 bg-black/50 border border-emerald-700 rounded-xl px-3 py-2 text-sm text-white font-semibold focus:outline-none focus:border-amber-400" />
+            <button type="button" onclick="window.playerCustomRaise()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
+              Повысить
+            </button>
+          </div>
+
+          <!-- Call / Check & Fold Buttons -->
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            <button id="btn-player-call" type="button" onclick="window.playerMakeBet('call', 0)" class="py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-slate-950 shadow transition">
+              ✅ Чек / Уравнять
+            </button>
+            <button id="btn-player-fold" type="button" onclick="window.playerMakeBet('fold', 0)" class="py-3 px-4 rounded-xl font-display font-bold text-xs sm:text-sm bg-rose-900/90 hover:bg-rose-800 text-rose-100 border border-rose-700 shadow transition">
+              🏳️ Пас (Сбросить)
+            </button>
+          </div>
+        </div>
+
+        <!-- Other Players Live Scoreboard on Phone -->
+        <div class="bg-emerald-950/80 border border-emerald-800/80 rounded-2xl p-4">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-300 mb-2.5">Все участники за столом:</h3>
+          <div id="player-table-list" class="space-y-2 text-xs"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODE 2: SOLO TABLE WITH AI (Стол с ИИ)                            -->
+    <!-- ================================================================= -->
+    <section id="view-solo" class="hidden space-y-5">
+      <div class="felt-table rounded-3xl p-5 sm:p-7">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-5 pb-4 border-b border-emerald-800/60">
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs uppercase font-bold px-2.5 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">Одиночный режим против 3 ботов</span>
+              <select id="solo-pack-select" onchange="window.soloSelectPack(this.value)" class="bg-emerald-900 border border-emerald-700 text-amber-300 text-xs font-bold rounded-lg px-2.5 py-1">
+                <option value="0">📦 Пак 1: Классический (1–25)</option>
+                <option value="1">📦 Пак 2: Мировой масштаб (26–50)</option>
+                <option value="2">📦 Пак 3: Наука и рекорды (51–75)</option>
+                <option value="3">📦 Пак 4: Эрудит-мастер (76–100)</option>
+              </select>
+            </div>
+            <h2 id="solo-q-title" class="font-display font-bold text-lg sm:text-xl text-white mt-2">Вопрос #1</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="bg-black/50 border border-amber-500/50 rounded-2xl px-4 py-2 text-center">
+              <div class="text-[10px] uppercase text-amber-200">Банк раунда</div>
+              <div class="font-display font-black text-xl text-amber-400"><span id="solo-pot">200</span> 🪙</div>
+            </div>
+            <div class="bg-black/40 border border-emerald-700 rounded-2xl px-4 py-2 text-center">
+              <div class="text-[10px] uppercase text-emerald-300">Ваши очки</div>
+              <div class="font-display font-black text-xl text-white"><span id="solo-user-chips">1000</span> 🪙</div>
+            </div>
+          </div>
+        </div>
+
+        <p id="solo-q-text" class="font-display font-bold text-lg sm:text-2xl text-white mb-4"></p>
+        <div id="solo-hints" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-5"></div>
+
+        <div id="solo-controls" class="bg-black/40 border border-emerald-800 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-bold text-emerald-200">Ваш ответ:</label>
+            <input id="solo-guess" type="number" placeholder="Число..." class="bg-emerald-950 border border-emerald-700 rounded-lg px-3 py-1.5 text-sm text-white font-bold w-36" />
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="window.soloStep('check')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold">✅ Чек / Уравнять (+50)</button>
+            <button type="button" onclick="window.soloStep('raise')" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold">🔼 Повысить (+150)</button>
+            <button type="button" onclick="window.soloStep('fold')" class="px-4 py-2 rounded-xl bg-rose-900 hover:bg-rose-800 text-white text-xs font-bold">🏳️ Пас</button>
+            <button type="button" onclick="window.soloNextQuestion()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-200 text-xs font-bold">Следующий вопрос ▶</button>
+          </div>
+        </div>
+
+        <div id="solo-result" class="hidden mt-4 bg-emerald-950/90 border border-amber-400 rounded-2xl p-4 text-sm"></div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODE 3: LOCAL PARTY (Компания 2-6 на одном устройстве)            -->
+    <!-- ================================================================= -->
+    <section id="view-party" class="hidden space-y-5">
+      <div class="bg-emerald-950/80 border border-emerald-800 rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <div>
+            <h2 class="font-display font-bold text-xl text-white">Компания за одним экраном</h2>
+            <p class="text-xs text-emerald-300">Для игры с разных телефонов по ссылке переключитесь во вкладку «🎙️ Онлайн / Ведущий».</p>
+          </div>
+          <button type="button" onclick="window.switchMode('host')" class="px-4 py-2 rounded-xl bg-amber-500 text-slate-950 font-bold text-xs">
+            Перейти в Онлайн по ссылке →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================================================================= -->
+    <!-- MODE 4: 100 QUESTIONS CATALOG (4 ПАКА ПО 25 ВОПРОСОВ)             -->
+    <!-- ================================================================= -->
+    <section id="view-catalog" class="hidden space-y-5">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-emerald-950/80 border border-emerald-800 rounded-2xl p-4">
+        <div>
+          <h2 class="font-display font-extrabold text-xl sm:text-2xl text-white">📚 Полная база: 100 вопросов (4 пака по 25)</h2>
+          <p class="text-xs text-emerald-300">Все паки сбалансированы по темам и сложности. Выберите пак ниже:</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button type="button" onclick="window.filterCatalogByPack(0)" id="cat-pack-btn-0" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950">
+            📦 Пак 1 (1–25)
+          </button>
+          <button type="button" onclick="window.filterCatalogByPack(1)" id="cat-pack-btn-1" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-900 text-emerald-200 hover:bg-emerald-800">
+            📦 Пак 2 (26–50)
+          </button>
+          <button type="button" onclick="window.filterCatalogByPack(2)" id="cat-pack-btn-2" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-900 text-emerald-200 hover:bg-emerald-800">
+            📦 Пак 3 (51–75)
+          </button>
+          <button type="button" onclick="window.filterCatalogByPack(3)" id="cat-pack-btn-3" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-900 text-emerald-200 hover:bg-emerald-800">
+            📦 Пак 4 (76–100)
+          </button>
+          <button type="button" onclick="window.filterCatalogByPack(-1)" id="cat-pack-btn-all" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-950 border border-emerald-700 text-emerald-300 hover:bg-emerald-900">
+            Все 100
+          </button>
+        </div>
+      </div>
+      <div id="catalog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+  </main>
+
+  <!-- QR Code Modal -->
+  <div id="qr-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-emerald-950 border-2 border-amber-500 rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-2xl">
+      <h3 class="font-display font-black text-xl text-white">Вход для игроков</h3>
+      <p class="text-xs text-emerald-200">Отсканируйте QR-код камерой смартфона или перейдите по ссылке:</p>
+      <div id="qrcode-box" class="bg-white p-4 rounded-2xl inline-block mx-auto"></div>
+      <div id="qr-room-code" class="font-mono font-black text-2xl text-amber-400"></div>
+      <button type="button" onclick="window.toggleQrModal(false)" class="w-full py-2.5 rounded-xl bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-sm">
+        Закрыть
+      </button>
+    </div>
+  </div>
+
+  <!-- Rules Modal -->
+  <div id="rules-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-emerald-950 border border-emerald-700 rounded-3xl p-6 max-w-lg w-full space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-emerald-800 pb-3">
+        <h3 class="font-display font-black text-lg text-amber-400">Правила «ЛОК СТОК. Ставка на знания»</h3>
+        <button type="button" onclick="window.toggleRulesModal(false)" class="text-emerald-300 hover:text-white text-lg font-bold">✕</button>
+      </div>
+      <ol class="text-xs sm:text-sm text-emerald-100 space-y-2.5 list-decimal list-inside">
+        <li><strong>Выбор пака и создание комнаты:</strong> В игре 4 сбалансированных пака по 25 вопросов (всего 100). Ведущий выбирает пак, создаёт комнату и отправляет ссылку игрокам.</li>
+        <li><strong>Вопрос и числовой ответ:</strong> На все вопросы ответом является число. Игроки со своих устройств вводят свой вариант ответа.</li>
+        <li><strong>3 подсказки и ставки:</strong> Ведущий по очереди открывает 3 кнопки с подсказками. Игроки делают ставки (Чек/Уравнять, Повысить или Пас). Фишки сразу списываются в общий банк.</li>
+        <li><strong>Автоматический расчёт:</strong> Когда ведущий нажимает «Показать ответ», система сама определяет, чей ответ среди не спасовавших игроков ближе всего к правильному, и начисляет победителю весь банк!</li>
+      </ol>
+      <button type="button" onclick="window.toggleRulesModal(false)" class="w-full py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm">
+        Понятно!
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // =========================================================================
+    // НАЗВАНИЯ 4 ПАКОВ (ПО 25 ВОПРОСОВ В КАЖДОМ = 100 ВОПРОСОВ)
+    // =========================================================================
+    const PACK_NAMES = [
+      "Пак 1: Классический (1–25)",
+      "Пак 2: Мировой масштаб (26–50)",
+      "Пак 3: Наука и рекорды (51–75)",
+      "Пак 4: Эрудит-мастер (76–100)"
+    ];
+
+    // =========================================================================
+    // ПОЛНАЯ БАЗА ИЗ 100 ВОПРОСОВ
+    // =========================================================================
+    const QUESTIONS = [
+      // ================= ПАК 1 (Вопросы 1–25) =================
+      { id: 1, category: "История и техника", q: "В каком году состоялся первый в истории полёт человека на воздушном шаре (монгольфьере) в Париже?", hints: ["Это произошло в XVIII веке, ещё до Великой французской революции.", "В том же десятилетии США приняли свою Конституцию (1780-е годы).", "Полёт состоялся в ноябре, ровно за 6 лет до взятия Бастилии (1789)."], answer: 1783, unit: "год", expl: "21 ноября 1783 года Пилатр де Розье и маркиз д’Арланд совершили первый полёт на шаре братьев Монгольфье." },
+      { id: 2, category: "География", q: "Какова традиционная высота горы Эверест (Джомолунгмы) над уровнем моря в метрах?", hints: ["Высота превышает 8000 метров — это главный восьмитысячник планеты.", "Значение находится в диапазоне между 8800 и 8900 метрами.", "Первые две цифры — 88, последние две — 48."], answer: 8848, unit: "м", expl: "Общепринятая высота Эвереста составляет 8848 метров." },
+      { id: 3, category: "Анатомия и наука", q: "Сколько костей насчитывается в скелете взрослого человека?", hints: ["У новорождённого их около 270, но с возрастом многие срастаются.", "Это число больше 180, но меньше 230.", "Число немного превышает 200 и заканчивается на цифру 6."], answer: 206, unit: "костей", expl: "В скелете взрослого человека стандартно насчитывается 206 костей." },
+      { id: 4, category: "Космос", q: "Сколько земных суток длится один год на Венере (полный оборот вокруг Солнца)?", hints: ["Венера ближе к Солнцу, чем Земля, поэтому год там короче 365 дней.", "Венерианский год короче даже венерианских звёздных суток (243 земных дня).", "Точное число находится между 220 и 230 земными сутками."], answer: 225, unit: "суток", expl: "Венера совершает полный оборот вокруг Солнца за 224,7 (округлённо 225) земных суток." },
+      { id: 5, category: "Мировая культура", q: "Сколько ступеней ведёт от основания пьедестала до смотровой площадки в короне Статуи Свободы?", hints: ["Высота статуи вместе с пьедесталом составляет 93 метра.", "Количество ступеней почти совпадает с количеством дней в году.", "Точное число находится между 350 и 360."], answer: 354, unit: "ступени", expl: "Внутри Статуи Свободы до короны ведёт винтовая лестница из 354 ступеней." },
+      { id: 6, category: "Кино и искусство", q: "Сколько всего статуэток «Оскар» получил фильм «Титаник» Джеймса Кэмерона в 1998 году?", hints: ["Фильм был выдвинут в 14 номинациях и установил рекорд премии.", "Столько же «Оскаров» получили только «Бен-Гур» и «Властелин колец: Возвращение короля».", "Это двузначное число меньше 13."], answer: 11, unit: "статуэток", expl: "«Титаник» завоевал 11 премий «Оскар» из 14 номинаций." },
+      { id: 7, category: "Архитектура", q: "Какова высота башни «Бурдж-Халифа» в Дубае в метрах (включая шпиль)?", hints: ["Это самое высокое здание в мире, превышающее полкилометра.", "Высота составляет более 800 метров.", "Трёхзначное число-палиндром: начинается и заканчивается на 8, посередине — 2."], answer: 828, unit: "м", expl: "Высота небоскрёба «Бурдж-Халифа» составляет ровно 828 метров." },
+      { id: 8, category: "Спорт", q: "Какова длина классической марафонской дистанции в километрах (округлённо до целого)?", hints: ["Дистанция символизирует пробег воина от Марафона до Афин.", "Она больше 35 километров, но меньше 50 километров.", "Точная дистанция составляет XX км и 195 метров."], answer: 42, unit: "км", expl: "Длина марафона составляет 42 км 195 м (42 км)." },
+      { id: 9, category: "Химия и природа", q: "При какой температуре по шкале Цельсия закипает чистое золото при нормальном давлении?", hints: ["Плавится золото при 1064 °C, а кипит при температуре более чем в 2,5 раза выше.", "Температура кипения золота находится между 2700 °C и 3000 °C.", "Точное справочное значение — 2856 °C."], answer: 2856, unit: "°C", expl: "Температура кипения чистого золота составляет 2856 °C." },
+      { id: 10, category: "История", q: "Сколько лет на самом деле длилась Столетняя война между Англией и Францией?", hints: ["Вопреки названию, она продолжалась дольше 100 лет.", "Война началась в 1337 году, а закончилась в 1453 году.", "Вычтите 1337 из 1453."], answer: 116, unit: "лет", expl: "Столетняя война с перерывами продолжалась 116 лет (1337–1453)." },
+      { id: 11, category: "Технологии", q: "В каком году было отправлено самое первое в мире SMS-сообщение («Merry Christmas»)?", hints: ["Это произошло в конце XX века в Великобритании в сети Vodafone.", "Событие случилось в первой половине 1990-х годов.", "Через год после распада СССР."], answer: 1992, unit: "год", expl: "Первое SMS было отправлено инженером Нилом Папуортом 3 декабря 1992 года." },
+      { id: 12, category: "Литература", q: "Сколько всего пьес написал Уильям Шекспир (по современному классическому канону)?", hints: ["Помимо них он написал 154 сонета.", "Количество пьес находится между 34 и 42.", "В Первом фолио было 36 пьес, плюс «Перикл» и «Два знатных родича»."], answer: 38, unit: "пьес", expl: "В современном шекспироведении принято насчитывать 38 пьес." },
+      { id: 13, category: "Океанология", q: "Какова максимальная глубина Марианской впадины (Бездна Челленджера) в метрах?", hints: ["Глубина превышает 10 километров (10 000 метров).", "Если поместить туда Эверест (8848 м), над ним останется более 2 км воды.", "Значение совсем немного не дотягивает до 11 000 метров (около 10 994 м)."], answer: 10994, unit: "м", expl: "По современным акустическим замерам глубина составляет около 10 994 м." },
+      { id: 14, category: "Музыка", q: "Сколько клавиш (чёрных и белых в сумме) у стандартного современного фортепиано?", hints: ["Белых клавиш на клавиатуре 52, а чёрных — 36.", "Это двузначное число состоит из двух одинаковых цифр.", "Сложите 52 и 36."], answer: 88, unit: "клавиш", expl: "Стандартное фортепиано имеет 88 клавиш (52 белые и 36 чёрных)." },
+      { id: 15, category: "Биология", q: "Сколько сердец у обыкновенного осьминога?", hints: ["У него больше одного сердца, а кровь имеет голубой цвет.", "Одно сердце гонит кровь по телу, а остальные — через жабры.", "Их меньше 5."], answer: 3, unit: "сердца", expl: "У осьминога 3 сердца: одно главное и два жаберных." },
+      { id: 16, category: "Астрономия", q: "За сколько минут свет от Солнца долетает до Земли (округлённо до целых минут)?", hints: ["Расстояние до Солнца — 150 млн км, скорость света — 300 000 км/с.", "Разделите 150 000 000 на 300 000, чтобы получить секунды (500 с).", "Переведите 500 секунд в минуты (8 мин 20 сек)."], answer: 8, unit: "минут", expl: "Свет от Солнца идёт до Земли примерно 8 минут 20 секунд." },
+      { id: 17, category: "География России", q: "Какова максимальная глубина озера Байкал в метрах?", hints: ["Байкал — самое глубокое озеро на планете, глубже 1,5 километра.", "Значение находится между 1600 и 1700 метрами.", "Точное число из учебников географии — 1642 метра."], answer: 1642, unit: "м", expl: "Максимальная глубина озера Байкал составляет 1642 метра." },
+      { id: 18, category: "Игры и логика", q: "Какова сумма всех чисел на классическом колесе европейской рулетки (от 0 до 36)?", hints: ["На колесе числа от 1 до 36 плюс зеро.", "Сумма прогрессии от 1 до 36 вычисляется как (1 + 36) × 18.", "За эту сумму рулетку прозвали «чёртовым колесом»."], answer: 666, unit: "очков", expl: "Сумма всех чисел на колесе рулетки от 1 до 36 равна 666." },
+      { id: 19, category: "Мировая история", q: "В каком году затонул лайнер «Титаник»?", hints: ["Катастрофа произошла в апреле ещё до Первой мировой войны.", "Это было во втором десятилетии XX века.", "За два года до начала Первой мировой войны (1914)."], answer: 1912, unit: "год", expl: "«Титаник» затонул в ночь с 14 на 15 апреля 1912 года." },
+      { id: 20, category: "Автомобили", q: "Какой рекорд скорости в км/ч (округлённо до целого) установил сверхзвуковой автомобиль Thrust SSC в 1997 году?", hints: ["Это первый наземный автомобиль, преодолевший звуковой барьер.", "Скорость звука в воздухе у земли составляет около 1225 км/ч.", "Рекорд составил чуть больше скорости звука — 1228 км/ч."], answer: 1228, unit: "км/ч", expl: "Thrust SSC развил скорость 1227,985 (1228) км/ч." },
+      { id: 21, category: "Древний мир", q: "В каком году до нашей эры по легенде был основан Древний Рим?", hints: ["Это произошло в VIII веке до нашей эры.", "Число состоит из трёх цифр: 7, 5 и 3.", "Знаменитая дата: 21 апреля 753 года до н. э."], answer: 753, unit: "г. до н.э.", expl: "Согласно античной традиции, Рим был основан Ромулом в 753 году до н. э." },
+      { id: 22, category: "Финансы и крипто", q: "Сколько пицц купил программист Ласло Ханеч в мае 2010 года за 10 000 биткоинов?", hints: ["Это была первая в истории покупка товара за биткоины.", "Заказ был доставлен из пиццерии Papa John's.", "Их было больше одной, но меньше четырёх."], answer: 2, unit: "пиццы", expl: "22 мая 2010 года Ласло Ханеч заплатил 10 000 BTC за 2 большие пиццы." },
+      { id: 23, category: "Авиация", q: "Каков размах крыла самого большого грузового самолёта Ан-225 «Мрия» в метрах (округлённо до целого)?", hints: ["Размах крыла почти равен длине футбольного поля (около 90 метров).", "Точное число совпадает с количеством клавиш на пианино.", "Две восьмёрки."], answer: 88, unit: "м", expl: "Размах крыла Ан-225 составляет 88,4 метра (88 м)." },
+      { id: 24, category: "Инженерия", q: "Сколько лет строили Пизанскую башню (от закладки в 1173 году до завершения в 1372 году)?", hints: ["Строительство с перерывами растянулось почти на два столетия.", "Вычтите 1173 из 1372.", "Число на единицу меньше 200."], answer: 199, unit: "лет", expl: "Строительство велось с 1173 по 1372 год — ровно 199 лет." },
+      { id: 25, category: "География стран", q: "Сколько часовых поясов насчитывается на территории современной России?", hints: ["Россия — одна из самых протяжённых стран с запада на восток.", "От Калининграда (UTC+2) до Камчатки (UTC+12).", "Число находится между 9 и 12."], answer: 11, unit: "поясов", expl: "В России установлено 11 часовых зон (от UTC+2 до UTC+12)." },
+
+      // ================= ПАК 2 (Вопросы 26–50) =================
+      { id: 26, category: "История и космос", q: "Сколько минут длился первый полёт Юрия Гагарина в космос 12 апреля 1961 года?", hints: ["Корабль «Восток-1» совершил один виток вокруг Земли.", "Полёт длился чуть меньше двух часов.", "Это знаменитое число находится между 105 и 110 минутами."], answer: 108, unit: "минут", expl: "Полёт Юрия Гагарина продолжался ровно 108 минут (1 час 48 минут)." },
+      { id: 27, category: "География", q: "Какова протяжённость реки Нил в километрах (по классическим энциклопедическим данным)?", hints: ["Нил и Амазонка спорят за звание самой длинной реки мира.", "Длина превышает 6500 километров, но меньше 7000 километров.", "Классическое значение из учебников — 6670 км."], answer: 6670, unit: "км", expl: "Протяжённость Нила традиционно указывается как 6670 километров." },
+      { id: 28, category: "Анатомия и наука", q: "Сколько зубов у взрослого человека при полном комплекте (включая все 4 зуба мудрости)?", hints: ["У детей всего 20 молочных зубов.", "На каждой челюсти у взрослого по 16 зубов.", "Умножьте 16 на 2."], answer: 32, unit: "зуба", expl: "Полный набор зубов взрослого человека составляет 32 зуба." },
+      { id: 29, category: "Космос", q: "Сколько земных суток длится один год на Марсе (полный оборот вокруг Солнца)?", hints: ["Марс дальше от Солнца, чем Земля, поэтому год там длится почти в два раза дольше земного.", "Значение находится между 650 и 700 земными сутками.", "Точное число — 687 земных суток."], answer: 687, unit: "суток", expl: "Марсианский год составляет 687 земных суток." },
+      { id: 30, category: "Архитектура", q: "В каком году была открыта Эйфелева башня в Париже к Всемирной выставке?", hints: ["Выставка была приурочена к столетию Великой французской революции (1789).", "Это произошло в самом конце XIX века.", "Прибавьте 100 к 1789 году."], answer: 1889, unit: "год", expl: "Эйфелева башня была торжественно открыта 31 марта 1889 года." },
+      { id: 31, category: "Кино и искусство", q: "Сколько минут длится режиссёрская версия фильма «Властелин колец: Возвращение короля»?", hints: ["Обычная театральная версия идёт 201 минуту (3 часа 21 минуту).", "Режиссёрская версия длится более 4 часов (больше 240 минут).", "Точный хронометраж расширенной версии — 251 или 263 минуты (с дополнительными титрами фан-клуба)."], answer: 251, unit: "минута", expl: "Хронометраж режиссёрской версии «Возвращения короля» составляет 251 минуту (4 часа 11 минут)." },
+      { id: 32, category: "Инженерия", q: "Какова общая длина Крымского моста (автомобильной части через Керченский пролив) в километрах?", hints: ["Это самый длинный мост в России и один из длиннейших в Европе.", "Его длина больше 15 км, но меньше 25 км.", "Двузначное число, заканчивается на 9."], answer: 19, unit: "км", expl: "Протяжённость автомобильной части Крымского моста составляет 19 километров." },
+      { id: 33, category: "Спорт", q: "На какой высоте от паркета в сантиметрах висит баскетбольное кольцо по стандартам ФИБА и НБА?", hints: ["В имперской системе эта высота равна ровно 10 футам.", "Один фут — это 30,48 сантиметра.", "Умножьте 30,48 на 10 и округлите до целого числа сантиметров."], answer: 305, unit: "см", expl: "Стандартная высота баскетбольного кольца — 305 сантиметров (3,05 м)." },
+      { id: 34, category: "Химия и наука", q: "Сколько всего химических элементов официально открыто и утверждено в таблице Менделеева на сегодняшний день?", hints: ["Последний открытый элемент называется Оганесон (Og).", "При жизни Менделеева было известно 63 элемента, сейчас их почти вдвое больше.", "Число находится между 115 и 120."], answer: 118, unit: "элементов", expl: "В современной периодической системе официально признано 118 элементов." },
+      { id: 35, category: "История", q: "В каком году произошла Куликовская битва?", hints: ["Сражение русского войска под предводительством Дмитрия Донского против Мамая произошло в XIV веке.", "Это случилось ровно за 100 лет до стояния на реке Угре (1480).", "8 сентября 1380 года."], answer: 1380, unit: "год", expl: "Куликовская битва состоялась 8 сентября 1380 года." },
+      { id: 36, category: "Технологии", q: "В каком году Стив Джобс представил самый первый iPhone?", hints: ["Это произошло во второй половине 2000-х годов.", "За год до мирового финансового кризиса 2008 года.", "Презентация состоялась 9 января 2007 года."], answer: 2007, unit: "год", expl: "Первый iPhone был представлен Стивом Джобсом в январе 2007 года." },
+      { id: 37, category: "Литература", q: "Сколько сонетов входит в полный классический цикл Уильяма Шекспира?", hints: ["Их больше 140, но меньше 170.", "Самый знаменитый из них — сонет №130 («Её глаза на звёзды не похожи»).", "Число делится на 2 и заканчивается на 4."], answer: 154, unit: "сонета", expl: "Первое издание 1609 года и весь канон Шекспира включают ровно 154 сонета." },
+      { id: 38, category: "География", q: "Какова площадь самого маленького государства в мире — Ватикана — в гектарах (округлённо до целого)?", hints: ["Один квадратный километр — это 100 гектаров, а Ватикан меньше половины квадратного километра.", "Площадь составляет 0,44 км².", "Умножьте 0,44 на 100."], answer: 44, unit: "га", expl: "Площадь Ватикана составляет 44 гектара (0,44 км²)." },
+      { id: 39, category: "Музыка", q: "Сколько струн у классической концертной педальной арфы?", hints: ["Их значительно больше, чем у гитары (6), но меньше, чем клавиш у рояля (88).", "Диапазон концертной арфы составляет 6 с половиной октав.", "Точное число находится между 45 и 49."], answer: 47, unit: "струн", expl: "Классическая большая концертная арфа имеет 47 струн." },
+      { id: 40, category: "Биология", q: "Сколько шейных позвонков у жирафа?", hints: ["Несмотря на огромную длину шеи, у жирафа столько же шейных позвонков, сколько у человека и мыши.", "У всех млекопитающих (кроме ламантинов и ленивцев) это число одинаково.", "Счастливое однозначное число."], answer: 7, unit: "позвонков", expl: "У жирафа, как и у человека, ровно 7 шейных позвонков." },
+      { id: 41, category: "Астрономия", q: "Какова средняя температура на поверхности Венеры в градусах Цельсия?", hints: ["Из-за мощнейшего парникового эффекта Венера горячее даже Меркурия.", "Там легко плавится свинец (327 °C) и цинк (419 °C).", "Средняя температура находится между 460 и 475 °C."], answer: 467, unit: "°C", expl: "Средняя температура поверхности Венеры составляет около 467 °C." },
+      { id: 42, category: "География России", q: "Какова высота высочайшей вершины России и Европы — горы Эльбрус (западная вершина) в метрах?", hints: ["Эльбрус — потухший стратовулкан на Кавказе высотой более 5,5 км.", "Высота восточной вершины — 5621 метр, а западная на 21 метр выше.", "Сложите 5621 и 21."], answer: 5642, unit: "м", expl: "Высота западной вершины Эльбруса составляет 5642 метра." },
+      { id: 43, category: "Игры и логика", q: "Сколько всего малых кубиков (элементов) образуют внешний слой классического кубика Рубика 3×3×3 (без учёта центральной внутренней крестовины)?", hints: ["Куб 3×3×3 состоит из 3 × 3 × 3 = 27 позиций.", "В самом центре внутри находится 1 невидимая крестовина.", "Вычтите 1 из 27."], answer: 26, unit: "кубиков", expl: "Классический кубик Рубика состоит из 26 видимых внешних кубиков (8 угловых, 12 рёберных и 6 центральных)." },
+      { id: 44, category: "Мировая история", q: "В каком году Христофор Колумб впервые достиг берегов Америки?", hints: ["Экспедиция состоялась в самом конце XV века.", "В том же году в Испании завершилась Реконкиста (падение Гранады).", "На Руси этот год соответствовал 7000 году от Сотворения мира — 1492."], answer: 1492, unit: "год", expl: "12 октября 1492 года экспедиция Колумба достигла острова Сан-Сальвадор." },
+      { id: 45, category: "Автомобили", q: "В каком году с конвейера в Тольятти сошёл самый первый автомобиль ВАЗ-2101 («Копейка»)?", hints: ["Завод АВТОВАЗ строился совместно с итальянским концерном Fiat в конце 1960-х.", "Первые шесть автомобилей сошли с конвейера в апреле к 100-летию со дня рождения Ленина (1870).", "Прибавьте 100 к 1870 году."], answer: 1970, unit: "год", expl: "Первые ВАЗ-2101 сошли с конвейера 19 апреля 1970 года." },
+      { id: 46, category: "Древний мир", q: "Какова была изначальная высота Великой пирамиды Хеопса в Гизе в метрах (округлённо до целого)?", hints: ["Сейчас из-за утраты облицовки и верхушки её высота составляет около 138,8 метра.", "Изначально она была почти на 8 метров выше.", "Её проектная высота равнялась 280 древнеегипетским королевским локтям — около 146,6 метра."], answer: 147, unit: "м", expl: "Изначальная высота пирамиды Хеопса составляла 146,6 (округлённо 147) метров." },
+      { id: 47, category: "Финансы и крипто", q: "Каков максимальный программный лимит эмиссии биткоинов (в миллионах монет), заложенный Сатоши Накамото?", hints: ["Награда майнерам уменьшается вдвое каждые 4 года (халвинг).", "Уже добыто почти 19,8 миллиона монет.", "Абсолютный предел — целое число чуть больше 20 миллионов."], answer: 21, unit: "млн BTC", expl: "Максимальное количество биткоинов жёстко ограничено алгоритмом до 21 миллиона." },
+      { id: 48, category: "Авиация", q: "Какова крейсерская сверхзвуковая скорость пассажирского лайнера «Конкорд» в км/ч?", hints: ["«Конкорд» летал со скоростью чуть больше 2 Махов (вдвое быстрее звука).", "Дозвуковые пассажирские лайнеры летают около 900 км/ч.", "Крейсерская скорость «Конкорда» составляла около 2150 км/ч."], answer: 2150, unit: "км/ч", expl: "Крейсерская скорость «Конкорда» составляла 2150 км/ч (максимальная — до 2330 км/ч)." },
+      { id: 49, category: "Мировая культура", q: "В каком году в Афинах состоялись первые Олимпийские игры современности?", hints: ["Игры были возрождены по инициативе барона Пьера де Кубертена в конце XIX века.", "Они прошли за 4 года до Парижской Олимпиады 1900 года.", "Вычтите 4 из 1900."], answer: 1896, unit: "год", expl: "Первые летние Олимпийские игры современности прошли в Афинах в апреле 1896 года." },
+      { id: 50, category: "География стран", q: "Сколько звёзд изображено на государственном флаге Бразилии?", hints: ["Каждая звезда символизирует один из штатов страны плюс Федеральный округ.", "На флаге США 50 звёзд, а на флаге Бразилии — почти вдвое меньше.", "Число находится между 25 и 29."], answer: 27, unit: "звёзд", expl: "На флаге Бразилии изображено 27 белых пятиконечных звёзд (26 штатов и федеральный округ Бразилиа)." },
+
+      // ================= ПАК 3 (Вопросы 51–75) =================
+      { id: 51, category: "История и космос", q: "В каком году человек впервые ступил на поверхность Луны (миссия «Аполлон-11»)?", hints: ["Это произошло через 8 лет после полёта Юрия Гагарина (1961).", "Командиром экипажа был Нил Армстронг.", "20 июля 1969 года."], answer: 1969, unit: "год", expl: "Нил Армстронг и Базз Олдрин высадились на Луну 20 июля 1969 года." },
+      { id: 52, category: "География", q: "Сколько островов (крупных и мелких) входит в состав Японского архипелага по официальному пересчёту 2023 года?", hints: ["Долгое время считалось, что их около 6852, но цифровая аэрофотосъёмка увеличила это число более чем вдвое.", "Главных островов всего 4 (Хонсю, Хоккайдо, Кюсю, Сикоку).", "Общее число островов составляет чуть больше 14 000 (14 125)."], answer: 14125, unit: "островов", expl: "По данным Института геопространственной информации Японии (2023), архипелаг насчитывает 14 125 островов." },
+      { id: 53, category: "Анатомия и наука", q: "Сколько литров крови в среднем перекачивает сердце взрослого человека за одни сутки (в покое)?", hints: ["За одну минуту сердце перекачивает около 5–5,5 литров крови.", "В сутках 1440 минут.", "Умножьте 5 на 1440 (получится около 7200 литров)."], answer: 7200, unit: "литров", expl: "За сутки человеческое сердце перекачивает в среднем от 7000 до 7500 (около 7200) литров крови." },
+      { id: 54, category: "Космос", q: "Сколько официально подтверждённых спутников у Юпитера (по данным Международного астрономического союза на 2024–2026 гг.)?", hints: ["Четыре крупнейших (Ио, Европа, Ганимед, Каллисто) открыл ещё Галилей в 1610 году.", "Общее количество открытых спутников Юпитера приближается к сотне.", "Точное число находится между 90 и 98 (95 спутников)."], answer: 95, unit: "спутников", expl: "У Юпитера официально подтверждено 95 спутников." },
+      { id: 55, category: "Архитектура", q: "Сколько всего комнат (помещений) насчитывается в Зимнем дворце в Санкт-Петербурге?", hints: ["Это главный императорский дворец России, построенный Растрелли.", "Количество комнат превышает 1000.", "В исторических справочниках Эрмитажа традиционно указывается число 1084 комнаты (или около 1500 с учётом всех служебных помещений)."], answer: 1084, unit: "комнаты", expl: "По классической инвентаризации в Зимнем дворце насчитывается 1084 комнаты и зала." },
+      { id: 56, category: "Кино и искусство", q: "Каковы мировые кассовые сборы первого фильма «Аватар» (2009) в миллионах долларов (с учётом повторных прокатов, округлённо)?", hints: ["«Аватар» — самый кассовый фильм в истории мирового кинематографа.", "Его сборы почти достигли отметки в 3 миллиарда долларов (3000 млн).", "Точная сумма составляет около 2923 млн долларов."], answer: 2923, unit: "млн $", expl: "Мировые сборы «Аватара» составляют около 2,923 миллиарда долларов (2923 млн $)." },
+      { id: 57, category: "Инженерия", q: "Какова длина Евротоннеля под Ла-Маншем между Францией и Великобританией в километрах (округлённо до целого)?", hints: ["Из всей длины тоннеля 38 километров проходит непосредственно под дном моря.", "Общая длина с подъездными подземными участками составляет около 50 км.", "Точное значение — 50,5 км (округлённо 50 или 51 км)."], answer: 50, unit: "км", expl: "Длина Евротоннеля под Ла-Маншем составляет 50,45 км (50 км)." },
+      { id: 58, category: "Спорт", q: "За сколько секунд Усэйн Болт пробежал 100 метров в 2009 году в Берлине, установив мировой рекорд (ответ с точностью до сотых или округлённо до 9.58)?", hints: ["Он стал первым человеком, выбежавшим из 9,6 секунды.", "Рекорд держится с чемпионата мира 2009 года.", "Девять целых и пятьдесят восемь сотых секунды."], answer: 9.58, unit: "сек", expl: "Мировой рекорд Усэйна Болта на дистанции 100 метров равен 9,58 секунды." },
+      { id: 59, category: "Химия и физика", q: "Чему равен абсолютный ноль температуры по шкале Цельсия (со знаком минус)?", hints: ["При этой температуре прекращается тепловое хаотическое движение молекул.", "Ноль градусов Кельвина ниже минус 270 °C.", "Округлённо до целого числа: -273 °C."], answer: -273, unit: "°C", expl: "Абсолютный ноль составляет -273,15 °C (округлённо -273 °C)." },
+      { id: 60, category: "История", q: "В каком году произошло знаменитое Ледовое побоище на Чудском озере?", hints: ["Дружина Александра Невского разбила ливонских рыцарей в XIII веке.", "Это случилось через 2 года после Невской битвы (1240).", "5 апреля 1242 года."], answer: 1242, unit: "год", expl: "Ледовое побоище произошло 5 апреля 1242 года." },
+      { id: 61, category: "Технологии", q: "В каком году была основана компания Google Ларри Пейджем и Сергеем Брином?", hints: ["Поисковик вырос из университетского проекта BackRub в Стэнфорде в конце 1990-х.", "В том же году во Франции прошёл чемпионат мира по футболу, а в России случился дефолт.", "4 сентября 1998 года."], answer: 1998, unit: "год", expl: "Компания Google была официально зарегистрирована 4 сентября 1998 года." },
+      { id: 62, category: "Литература", q: "Сколько томов в полном классическом издании романа-эпопеи Льва Толстого «Война и мир»?", hints: ["Помимо основных томов в книге есть эпилог из двух частей.", "Количество основных томов меньше 6.", "Классическое число: 4 тома."], answer: 4, unit: "тома", expl: "Роман «Война и мир» состоит из 4 томов и эпилога." },
+      { id: 63, category: "Океанология", q: "Какова средняя солёность вод Мирового океана в промилле (граммах соли на 1 литр воды)?", hints: ["В Чёрном море солёность около 18 промилле, а в Красном — до 41 промилле.", "Средняя солёность океана находится между 30 и 40 граммами на литр.", "Ровно посередине между 30 и 40."], answer: 35, unit: "‰ (г/л)", expl: "Средняя солёность Мирового океана составляет 35 промилле (35 г солей на 1 л воды)." },
+      { id: 64, category: "Музыка", q: "Сколько завершённых симфоний написал Людвиг ван Бетховен?", hints: ["Последняя из них включает знаменитую «Оду к радости».", "С этого числа началось суеверие композиторов о «проклятии последней симфонии».", "Однозначное число больше 7."], answer: 9, unit: "симфоний", expl: "Людвиг ван Бетховен написал 9 завершённых симфоний." },
+      { id: 65, category: "Биология", q: "Какую максимальную скорость в км/ч может развивать гепард в коротком рывке за добычей?", hints: ["Гепард — самое быстрое наземное млекопитающее планеты.", "За 3 секунды он разгоняется от 0 до 100 км/ч.", "Его пиковая скорость достигает 110–120 км/ч (классический эталон — 112 км/ч)."], answer: 112, unit: "км/ч", expl: "Максимальная зафиксированная скорость гепарда составляет около 112–120 км/ч." },
+      { id: 66, category: "Астрономия", q: "Во сколько раз диаметр Солнца больше диаметра Земли (округлённо до целого)?", hints: ["Диаметр Земли — около 12 742 км, а диаметр Солнца — 1 392 700 км.", "Значение немного превышает 100 раз.", "Разделите 1 392 700 на 12 742 (получится ровно 109)."], answer: 109, unit: "раз", expl: "Диаметр Солнца примерно в 109 раз превышает диаметр Земли." },
+      { id: 67, category: "География России", q: "Какова длина главной магистрали Транссибирской железной дороги (от Москвы до Владивостока) в километрах?", hints: ["Это самая длинная железная дорога в мире.", "Поезд идёт по ней почти 7 суток, преодолевая более 9000 километров.", "Точное знаменитое число на километровом столбе во Владивостоке — 9288 км."], answer: 9288, unit: "км", expl: "Протяжённость Транссиба от Москвы до Владивостока составляет 9288 километров." },
+      { id: 68, category: "Игры и логика", q: "Сколько всего клеток (полей) на доске для международных (стоклеточных) шашек?", hints: ["На обычной русской шашечной и шахматной доске 8×8 = 64 клетки.", "В международных шашках используется доска размером 10×10.", "Умножьте 10 на 10."], answer: 100, unit: "клеток", expl: "Доска для международных шашек имеет размер 10×10, то есть ровно 100 клеток." },
+      { id: 69, category: "Мировая история", q: "Сколько дней правил Францией Наполеон Бонапарт после своего побега с острова Эльба в 1815 году до битвы при Ватерлоо?", hints: ["Этот период вошёл в историю под точным числовым названием.", "Фактически от вступления в Париж (20 марта) до отречения (22 июня) прошло чуть больше трёх месяцев.", "Круглое число — ровно одна сотня."], answer: 100, unit: "дней", expl: "Второе правление Наполеона вошло в историю как «Сто дней»." },
+      { id: 70, category: "Автомобили", q: "В каком году Карл Бенц получил патент №37435 на свой первый в мире автомобиль с бензиновым двигателем (Benz Patent-Motorwagen)?", hints: ["Это произошло в Германии в 1880-х годах.", "За три года до открытия Эйфелевой башни (1889).", "29 января 1886 года."], answer: 1886, unit: "год", expl: "29 января 1886 года Карл Бенц получил патент на первый автомобиль в мире." },
+      { id: 71, category: "Древний мир", q: "Сколько воинов входило в личный отряд спартанского царя Леонида в битве при Фермопилах (по классическому преданию)?", hints: ["Вместе с ними сражались и другие греческие союзники, но в легенду вошёл именно отряд спартанцев.", "По этому событию снят знаменитый голливудский блокбастер Зака Снайдера.", "Три сотни."], answer: 300, unit: "спартанцев", expl: "В историю вошёл подвиг 300 спартанцев царя Леонида в Фермопильском ущелье (480 г. до н. э.)." },
+      { id: 72, category: "Финансы и экономика", q: "Какова масса одной стандартной банковской тройской унции золота в граммах (округлённо до целого)?", hints: ["Обычная торговая унция весит 28,35 грамма, но тройская унция для драгоценных металлов тяжелее.", "Точное значение — 31,1034768 грамма.", "Округлите 31,1 до ближайшего целого числа."], answer: 31, unit: "грамм", expl: "Одна тройская унция равна 31,1 грамма (округлённо 31 г)." },
+      { id: 73, category: "Авиация", q: "Сколько секунд длился самый первый управляемый полёт самолёта братьев Райт «Флайер-1» 17 декабря 1903 года?", hints: ["Орвилл Райт пролетел тогда расстояние всего в 36,5 метра.", "Полёт длился меньше полуминуты.", "Точное время первой попытки — ровно 12 секунд (четвёртая попытка в тот же день длилась 59 с)."], answer: 12, unit: "секунд", expl: "Первый в истории полёт самолёта братьев Райт длился 12 секунд." },
+      { id: 74, category: "Мировая культура", q: "В каком году картина Леонардо да Винчи «Мона Лиза» была похищена из Лувра итальянским стекольщиком Винченцо Перуджей?", hints: ["Кража века произошла в начале XX века, за год до гибели «Титаника» (1912).", "Картину искали два года и нашли во Флоренции в 1913 году.", "21 августа 1911 года."], answer: 1911, unit: "год", expl: "«Мона Лиза» была похищена из Лувра 21 августа 1911 года." },
+      { id: 75, category: "География стран", q: "Сколько государств в мире официально не имеют выхода к открытому морю (Мировому океану)?", hints: ["Больше всего таких стран находится в Африке (16) и Европе (14).", "Среди них — Швейцария, Австрия, Казахстан, Монголия, Боливия.", "Общее число таких стран в мире — 44."], answer: 44, unit: "страны", expl: "В мире насчитывается 44 государства, не имеющих выхода к Мировому океану." },
+
+      // ================= ПАК 4 (Вопросы 76–100) =================
+      { id: 76, category: "История и космос", q: "В каком году Советский Союз запустил первый в истории искусственный спутник Земли («Спутник-1»)?", hints: ["Запуск открыл космическую эру человечества за 4 года до полёта Гагарина (1961).", "Это произошло 4 октября во второй половине 1950-х годов.", "Вычтите 4 из 1961."], answer: 1957, unit: "год", expl: "Первый искусственный спутник Земли был запущен 4 октября 1957 года." },
+      { id: 77, category: "География", q: "На сколько метров ниже уровня Мирового океана находится побережье Мёртвого моря (самая низкая точка суши)?", hints: ["Уровень воды в Мёртвом море постепенно падает и уже опустился ниже 400 метров.", "Значение находится между 420 и 440 метрами ниже уровня моря.", "В современных атласах указывается отметка около 430 метров."], answer: 430, unit: "м", expl: "Берег Мёртвого моря находится примерно на 430 метров ниже уровня моря." },
+      { id: 78, category: "Анатомия и наука", q: "Какова примерная масса головного мозга взрослого человека в граммах (среднее значение)?", hints: ["Мозг составляет около 2% от общей массы тела человека.", "Его вес больше 1 килограмма (1000 г), но меньше 1,8 килограмма.", "Среднее анатомическое значение — около 1350–1400 граммов."], answer: 1400, unit: "г", expl: "Средняя масса головного мозга взрослого человека составляет около 1350–1400 граммов." },
+      { id: 79, category: "Космос", q: "Сколько миллиардов лет составляет возраст нашей Вселенной по современным астрофизическим расчётам (округлённо до десятых или целого)?", hints: ["Возраст Солнечной системы — около 4,5 миллиарда лет, а Вселенная втрое старше.", "По данным космического телескопа «Планк», значение находится между 13 и 14 миллиардами лет.", "Точное значение — 13,8 миллиарда лет."], answer: 13.8, unit: "млрд лет", expl: "Возраст Вселенной от Большого взрыва оценивается в 13,799 (13,8) миллиарда лет." },
+      { id: 80, category: "Архитектура", q: "Сколько куполов (глав) венчают Покровский собор (Храм Василия Блаженного) на Красной площади в Москве?", hints: ["Девять куполов соответствуют первоначальным престолам, плюс купол над приделом Василия Блаженного и над колокольней.", "Их больше 8, но меньше 13.", "Всего у собора 11 куполов."], answer: 11, unit: "куполов", expl: "Храм Василия Блаженного венчают 11 куполов (10 над церквями и 1 над колокольней)." },
+      { id: 81, category: "Кино и искусство", q: "В каком году в Париже на бульваре Капуцинок состоялся первый коммерческий киносеанс братьев Люмьер?", hints: ["Это произошло в самом конце XIX века, ровно за 5 лет до наступления 1900 года.", "В том же году Вильгельм Рентген открыл рентгеновские лучи, а Попов продемонстрировал радио.", "28 декабря 1895 года."], answer: 1895, unit: "год", expl: "Первый платный киносеанс братьев Люмьер прошёл 28 декабря 1895 года." },
+      { id: 82, category: "Инженерия", q: "Какова протяжённость Панамского канала, соединяющего Тихий и Атлантический океаны, в километрах (округлённо до целого)?", hints: ["Суэцкий канал в Египте имеет длину 160 км, а Панамский канал примерно вдвое короче.", "Длина материковой части канала — 65 км, а с морскими подходными каналами — около 82 км.", "Число между 80 и 83 км."], answer: 82, unit: "км", expl: "Полная длина Панамского канала составляет 81,6 (округлённо 82) километра." },
+      { id: 83, category: "Спорт", q: "Сколько всего минут длится основное и дополнительное время (овертаймы) футбольного матча до серии пенальти?", hints: ["Основное время состоит из двух таймов по 45 минут (90 минут).", "Дополнительное время состоит из двух экстра-таймов по 15 минут (30 минут).", "Сложите 90 и 30."], answer: 120, unit: "минут", expl: "Основное время (90 мин) плюс два дополнительных тайма по 15 мин составляют ровно 120 минут." },
+      { id: 84, category: "Химия и природа", q: "Сколько процентов объёма сухого земного воздуха у поверхности планеты составляет газ азот (округлённо до целого)?", hints: ["Кислород занимает только второе место — около 21%.", "Углекислый газ и аргон составляют около 1%.", "Вычтите 22% из 100%."], answer: 78, unit: "%", expl: "Атмосфера Земли состоит на 78,08% (78%) из азота и на 20,95% из кислорода." },
+      { id: 85, category: "История", q: "В каком году Пётр I основал город Санкт-Петербург (заложил Петропавловскую крепость)?", hints: ["Это произошло в самом начале XVIII века в ходе Северной войны.", "Дата основания — 27 мая (16 мая по старому стилю).", "Третий год нового столетия — 1703."], answer: 1703, unit: "год", expl: "Санкт-Петербург был основан Петром I 27 мая 1703 года." },
+      { id: 86, category: "Технологии", q: "Сколько мегабайт информации вмещал стандартный компакт-диск (CD-ROM) диаметром 12 см?", hints: ["На 3,5-дюймовую дискету помещалось всего 1,44 МБ, а на CD — в сотни раз больше.", "Ёмкость рассчитывалась под 80 минут некомпрессированного аудио.", "Классическое число на упаковке каждого CD-R диска — 700 МБ."], answer: 700, unit: "МБ", expl: "Стандартная ёмкость 80-минутного компакт-диска составляет 700 мегабайт." },
+      { id: 87, category: "Литература", q: "Сколько лет провёл Робинзон Крузо на необитаемом острове в романе Даниэля Дефо?", hints: ["Реальный прототип Александр Селькирк прожил на острове всего 4 года и 4 месяца.", "Герой романа Дефо пробыл на острове почти три десятилетия.", "Точное число: 28 лет, 2 месяца и 19 дней."], answer: 28, unit: "лет", expl: "По тексту романа Робинзон Крузо провёл на острове 28 лет." },
+      { id: 88, category: "Океанология", q: "Во сколько раз Тихий океан больше по площади самого маленького — Северного Ледовитого океана (округлённо до целого)?", hints: ["Площадь Тихого океана — около 178,7 млн км².", "Площадь Северного Ледовитого океана — около 14,75 млн км².", "Разделите 178,7 на 14,75 (получится около 12)."], answer: 12, unit: "раз", expl: "Тихий океан (178,7 млн км²) примерно в 12 раз больше Северного Ледовитого (14,75 млн км²)." },
+      { id: 89, category: "Музыка", q: "В каком возрасте (полных лет) ушёл из жизни Вольфганг Амадей Моцарт?", hints: ["Он прожил короткую жизнь, но успел написать более 600 произведений.", "Он родился в 1756 году, а умер в декабре 1791 года.", "Вычтите 1756 из 1791."], answer: 35, unit: "лет", expl: "Моцарт прожил 35 лет (1756–1791)." },
+      { id: 90, category: "Биология", q: "Сколько тонн может весить самое крупное животное в истории Земли — взрослый синий кит (максимальная зафиксированная масса)?", hints: ["Даже язык синего кита весит около 3–4 тонн (как взрослый слон).", "Его длина достигает 33 метров.", "Максимальная масса составляет от 150 до 190 тонн (эталонный рекорд — около 180 тонн)."], answer: 180, unit: "тонн", expl: "Масса крупного синего кита достигает 150–190 (в среднем рекордном значении 180) тонн." },
+      { id: 91, category: "Астрономия", q: "В каком году Плутон был официально лишён статуса полноценной 9-й планеты Солнечной системы и переведён в разряд карликовых планет?", hints: ["Решение было принято на ассамблее Международного астрономического союза в Праге в 2000-х годах.", "В том же году аппарат New Horizons стартовал с Земли к Плутону.", "Это произошло в 2006 году."], answer: 2006, unit: "год", expl: "В августе 2006 года МАС перевёл Плутон в категорию карликовых планет." },
+      { id: 92, category: "География России", q: "Сколько морей омывают берега Российской Федерации (включая замкнутое Каспийское море-озеро)?", hints: ["Моря принадлежат бассейнам трёх океанов (Атлантического, Северного Ледовитого и Тихого) плюс внутренний бассейн.", "Без Каспия их 12, а вместе с Каспийским морем — на одно больше.", "Чёртова дюжина."], answer: 13, unit: "морей", expl: "Территорию России омывают 12 морей трёх океанов и Каспийское море-озеро — всего 13 морей." },
+      { id: 93, category: "Игры и логика", q: "Какова сумма всех очков на полном комплекте из 28 костяшек классического домино?", hints: ["Каждая цифра от 0 до 6 встречается на половинках костяшек ровно по 8 раз.", "Сумма цифр от 0 до 6 равна 21.", "Умножьте 21 на 8."], answer: 168, unit: "очков", expl: "Сумма всех точек в стандартном наборе домино из 28 костяшек равна 168." },
+      { id: 94, category: "Мировая история", q: "В каком году пала Западная Римская империя (низложение последнего императора Ромула Августула)?", hints: ["Это событие считается рубежом между Античностью и Средневековьем.", "Оно произошло в V веке нашей эры.", "Четыреста семьдесят шестой год."], answer: 476, unit: "год", expl: "4 сентября 476 года вождь германцев Одоакр низложил Ромула Августула." },
+      { id: 95, category: "Автомобили", q: "Сколько золотых или серебряных колец переплетено на эмблеме автомобильной марки Audi?", hints: ["Каждое кольцо символизирует одну из четырёх компаний, объединившихся в концерн Auto Union в 1932 году (Audi, DKW, Horch и Wanderer).", "На олимпийской эмблеме 5 колец, а у Audi — на одно меньше.", "Однозначное чётное число."], answer: 4, unit: "кольца", expl: "Логотип Audi состоит из 4 переплетённых колец." },
+      { id: 96, category: "Древний мир", q: "Сколько Чудес света насчитывалось в классическом античном списке Древнего мира?", hints: ["До наших дней из них сохранилось только одно — пирамида Хеопса.", "В список также входили Висячие сады Семирамиды, Колосс Родосский, Александрийский маяк и др.", "Классическое магическое число древности."], answer: 7, unit: "чудес", expl: "Канонический античный список включает 7 чудес света." },
+      { id: 97, category: "Финансы и история", q: "За сколько миллионов долларов Российская империя продала Аляску США в 1867 году (с точностью до десятых)?", hints: ["Цена составила около 2 центов за акр земли.", "Сумма в золотых долларах была меньше 10 миллионов.", "Семь целых и две десятых миллиона долларов."], answer: 7.2, unit: "млн $", expl: "Договор о продаже Аляски 30 марта 1867 года был заключён на сумму 7,2 миллиона долларов." },
+      { id: 98, category: "Авиация и рекорды", q: "С какой высоты в километрах (округлённо до целого) австрийский скайдайвер Феликс Баумгартнер совершил прыжок из стратосферы в 2012 году?", hints: ["В свободном падении он впервые преодолел скорость звука без моторных средств.", "Обычные пассажирские самолёты летают на высоте 10–11 км, а его стратостат поднялся почти вчетверо выше.", "Точная высота прыжка составила 38 969 метров (округлённо 39 км)."], answer: 39, unit: "км", expl: "Феликс Баумгартнер прыгнул с высоты 38,97 (39) километра." },
+      { id: 99, category: "Мировая культура", q: "Сколько лет длилась легендарная осада Трои греками-ахейцами согласно Гомеру и античным мифам?", hints: ["Одиссей возвращался домой на Итаку столько же лет, сколько длилась сама осада.", "«Илиада» описывает лишь последние недели последнего года этой войны.", "Круглое двузначное число — одно десятилетие."], answer: 10, unit: "лет", expl: "По античному преданию Троянская война и осада Трои продолжались 10 лет." },
+      { id: 100, category: "География стран", q: "Сколько официальных языков признано в Организации Объединённых Наций (ООН)?", hints: ["В этот список входят английский, французский, испанский, русский, арабский и китайский.", "На всех этих языках публикуются официальные документы ООН.", "Однозначное число меньше 8."], answer: 6, unit: "языков", expl: "В ООН установлено 6 официальных языков: английский, арабский, испанский, китайский, русский и французский." }
+    ];
+
+    const PEER_CONFIG = {
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' }
+        ]
+      }
+    };
+
+    // =========================================================================
+    // ЗВУКОВЫЕ ЭФФЕКТЫ (Web Audio API)
+    // =========================================================================
+    let soundEnabled = true;
+    function playTone(freq = 520, duration = 0.12, type = 'sine') {
+      if (!soundEnabled) return;
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    window.toggleSound = function() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-icon').textContent = soundEnabled ? '🔊' : '🔇';
+    };
+
+    window.toggleRulesModal = function(show) {
+      document.getElementById('rules-modal').classList.toggle('hidden', !show);
+    };
+
+    window.toggleQrModal = function(show) {
+      document.getElementById('qr-modal').classList.toggle('hidden', !show);
+    };
+
+    // =========================================================================
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК САЙТА
+    // =========================================================================
+    window.switchMode = function(mode) {
+      ['host', 'solo', 'party', 'catalog'].forEach(m => {
+        document.getElementById('view-' + m).classList.toggle('hidden', m !== mode);
+        const tab = document.getElementById('tab-' + m);
+        if (m === mode) {
+          tab.className = "mode-tab px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 bg-amber-500 text-slate-950 shadow";
+        } else {
+          tab.className = "mode-tab px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 text-emerald-200 hover:text-white hover:bg-emerald-900/60";
+        }
+      });
+    };
+
+    // =========================================================================
+    // МУЛЬТИПЛЕЕР: СОСТОЯНИЕ ИГРЫ И СИНХРОНИЗАЦИЯ
+    // =========================================================================
+    let mpRole = null;
+    let roomCode = null;
+    let peer = null;
+    let hostConnections = {};
+    let playerConn = null;
+    let bcChannel = null;
+    let myPlayerId = 'p_' + Math.random().toString(36).substring(2, 9);
+    let myPlayerName = '';
+    let hostPeekAnswers = false;
+
+    let gameState = {
+      roomCode: '',
+      startingChips: 1000,
+      ante: 50,
+      packIndex: 0, // 0..3 (по 25 вопросов в паке)
+      qIndex: 0,    // 0..99 глобальный индекс вопроса в QUESTIONS
+      revealedHints: [false, false, false],
+      answerRevealed: false,
+      pot: 0,
+      maxBet: 0,
+      winnerInfo: null,
+      players: {}
+    };
+
+    // Обновление выпадающего списка вопросов для выбранного пака у Ведущего
+    function populateHostQuestionSelect() {
+      const sel = document.getElementById('host-question-select');
+      if (!sel) return;
+      const startIdx = gameState.packIndex * 25;
+      const endIdx = startIdx + 25;
+      const packQuestions = QUESTIONS.slice(startIdx, endIdx);
+
+      sel.innerHTML = packQuestions.map((q, i) => {
+        const globalIdx = startIdx + i;
+        return `<option value="${globalIdx}">Вопрос ${i + 1}/25 (#${q.id}): ${q.category} — ${q.q.slice(0, 32)}...</option>`;
+      }).join('');
+      sel.value = gameState.qIndex;
+    }
+
+    // Отрисовка каталога из 100 вопросов с фильтрацией по пакам
+    window.filterCatalogByPack = function(packIdx) {
+      [0, 1, 2, 3].forEach(i => {
+        const btn = document.getElementById('cat-pack-btn-' + i);
+        if (btn) {
+          btn.className = (i === packIdx)
+            ? "px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 shadow"
+            : "px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-900 text-emerald-200 hover:bg-emerald-800";
+        }
+      });
+      const allBtn = document.getElementById('cat-pack-btn-all');
+      if (allBtn) {
+        allBtn.className = (packIdx === -1)
+          ? "px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-slate-950 shadow"
+          : "px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-950 border border-emerald-700 text-emerald-300 hover:bg-emerald-900";
+      }
+
+      const grid = document.getElementById('catalog-grid');
+      if (!grid) return;
+
+      const filtered = QUESTIONS.map((q, idx) => ({ q, idx })).filter(item => {
+        if (packIdx === -1) return true;
+        return Math.floor(item.idx / 25) === packIdx;
+      });
+
+      grid.innerHTML = filtered.map(({ q, idx }) => {
+        const pNum = Math.floor(idx / 25) + 1;
+        const inPackNum = (idx % 25) + 1;
+        return `
+          <div class="bg-emerald-950/80 border border-emerald-800/80 rounded-2xl p-4 flex flex-col justify-between card-flip">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-900 text-emerald-300 border border-emerald-700">Пак ${pNum} (${inPackNum}/25)</span>
+                  <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">#${q.id} • ${q.category}</span>
+                </div>
+                <span class="text-xs font-mono text-emerald-300">Ответ: <strong>${q.answer} ${q.unit}</strong></span>
+              </div>
+              <h4 class="font-display font-bold text-sm sm:text-base text-white mb-2">${q.q}</h4>
+              <ul class="text-xs text-emerald-200/80 space-y-1 mb-3 list-disc list-inside">
+                <li>${q.hints[0]}</li>
+                <li>${q.hints[1]}</li>
+                <li>${q.hints[2]}</li>
+              </ul>
+            </div>
+            <button type="button" onclick="window.loadQuestionFromCatalog(${idx})" class="w-full py-2 rounded-xl bg-emerald-800 hover:bg-amber-500 hover:text-slate-950 text-emerald-100 font-bold text-xs transition">
+              Загрузить этот вопрос на стол ведущего
+            </button>
+          </div>
+        `;
+      }).join('');
+    };
+
+    window.loadQuestionFromCatalog = function(globalIdx) {
+      window.switchMode('host');
+      if (mpRole === 'host') {
+        gameState.packIndex = Math.floor(globalIdx / 25);
+        document.getElementById('host-pack-select').value = gameState.packIndex;
+        populateHostQuestionSelect();
+        window.hostSelectQuestion(globalIdx);
+      }
+    };
+
+    function setupBroadcastChannel(code) {
+      try {
+        if (bcChannel) bcChannel.close();
+        if ('BroadcastChannel' in window) {
+          bcChannel = new BroadcastChannel('lockstock_room_' + code);
+          bcChannel.onmessage = (ev) => {
+            handleIncomingMessage(ev.data, null);
+          };
+        }
+      } catch (e) {}
+    }
+
+    window.addEventListener('storage', (ev) => {
+      if (!roomCode) return;
+      if (ev.key === 'ls_msg_' + roomCode && ev.newValue) {
+        try {
+          const parsed = JSON.parse(ev.newValue);
+          handleIncomingMessage(parsed.payload, null);
+        } catch (e) {}
+      }
+    });
+
+    function sendLocalFallback(msg) {
+      try {
+        localStorage.setItem('ls_msg_' + roomCode, JSON.stringify({ t: Date.now(), payload: msg }));
+      } catch (e) {}
+    }
+
+    function sendToHost(msg) {
+      if (bcChannel) {
+        try { bcChannel.postMessage(msg); } catch (e) {}
+      }
+      sendLocalFallback(msg);
+      if (playerConn && playerConn.open) {
+        try { playerConn.send(msg); } catch (e) {}
+      }
+    }
+
+    function broadcastStateFromHost() {
+      const packet = { type: 'STATE_SYNC', state: gameState };
+      if (bcChannel) {
+        try { bcChannel.postMessage(packet); } catch (e) {}
+      }
+      sendLocalFallback(packet);
+      Object.values(hostConnections).forEach(conn => {
+        if (conn && conn.open) {
+          try { conn.send(packet); } catch (e) {}
+        }
+      });
+      renderHostUI();
+    }
+
+    function handleIncomingMessage(data, conn) {
+      if (!data || !data.type) return;
+
+      if (mpRole === 'host') {
+        if (data.type === 'PLAYER_JOIN') {
+          const pid = data.playerId;
+          if (!gameState.players[pid]) {
+            const anteToPay = (!gameState.answerRevealed && gameState.ante > 0) ? Math.min(gameState.startingChips, gameState.ante) : 0;
+            gameState.players[pid] = {
+              id: pid,
+              name: data.name || 'Игрок',
+              chips: gameState.startingChips - anteToPay,
+              roundStartChips: gameState.startingChips,
+              currentBet: anteToPay,
+              guess: null,
+              folded: false,
+              lastAction: anteToPay > 0 ? `Внёс анте ${anteToPay}` : 'Подключился'
+            };
+            gameState.pot += anteToPay;
+            if (anteToPay > gameState.maxBet) gameState.maxBet = anteToPay;
+            playTone(660, 0.15, 'triangle');
+          } else {
+            gameState.players[pid].name = data.name || gameState.players[pid].name;
+          }
+          broadcastStateFromHost();
+        }
+        else if (data.type === 'PLAYER_GUESS') {
+          const p = gameState.players[data.playerId];
+          if (p && !gameState.answerRevealed && !p.folded) {
+            p.guess = Number(data.guess);
+            p.lastAction = 'Ответ принят 🔒';
+            playTone(540, 0.1);
+            broadcastStateFromHost();
+          }
+        }
+        else if (data.type === 'PLAYER_BET') {
+          const p = gameState.players[data.playerId];
+          if (!p || gameState.answerRevealed || p.folded) return;
+
+          const action = data.action;
+          const amount = Number(data.amount) || 0;
+
+          if (action === 'fold') {
+            p.folded = true;
+            p.lastAction = 'Пас 🏳️';
+            playTone(300, 0.18, 'sawtooth');
+          } else if (action === 'call') {
+            const needToCall = Math.max(0, gameState.maxBet - p.currentBet);
+            const actualPay = Math.min(p.chips, needToCall);
+            p.chips -= actualPay;
+            p.currentBet += actualPay;
+            gameState.pot += actualPay;
+            p.lastAction = actualPay === 0 ? 'Чек ✅' : `Уравнял (+${actualPay}) ✅`;
+            playTone(600, 0.12);
+          } else if (action === 'raise') {
+            const needToCall = Math.max(0, gameState.maxBet - p.currentBet);
+            const totalAdd = Math.min(p.chips, needToCall + amount);
+            if (totalAdd > 0) {
+              p.chips -= totalAdd;
+              p.currentBet += totalAdd;
+              gameState.pot += totalAdd;
+              if (p.currentBet > gameState.maxBet) {
+                gameState.maxBet = p.currentBet;
+              }
+              p.lastAction = `Повысил до ${p.currentBet} 🔼`;
+              playTone(740, 0.15, 'triangle');
+            }
+          } else if (action === 'allin') {
+            const allInAdd = p.chips;
+            if (allInAdd > 0) {
+              p.chips = 0;
+              p.currentBet += allInAdd;
+              gameState.pot += allInAdd;
+              if (p.currentBet > gameState.maxBet) {
+                gameState.maxBet = p.currentBet;
+              }
+              p.lastAction = `ВА-БАНК (${p.currentBet}) 🔥`;
+              playTone(880, 0.2, 'square');
+            }
+          }
+          broadcastStateFromHost();
+        }
+      }
+      else if (mpRole === 'player') {
+        if (data.type === 'STATE_SYNC') {
+          gameState = data.state;
+          const dot = document.getElementById('player-conn-dot');
+          if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+          renderPlayerUI();
+        }
+      }
+    }
+
+    // =========================================================================
+    // ЗАПУСК СЕССИИ ВЕДУЩЕГО
+    // =========================================================================
+    window.startHostSession = function() {
+      try {
+        mpRole = 'host';
+        roomCode = String(Math.floor(1000 + Math.random() * 9000));
+        const chipsEl = document.getElementById('host-init-chips');
+        const anteEl = document.getElementById('host-init-ante');
+        const packEl = document.getElementById('host-init-pack');
+
+        const startChips = Math.max(100, Number(chipsEl ? chipsEl.value : 1000) || 1000);
+        const anteVal = Math.max(0, Number(anteEl ? anteEl.value : 50) || 50);
+        const selectedPack = Number(packEl ? packEl.value : 0) || 0;
+
+        gameState = {
+          roomCode: roomCode,
+          startingChips: startChips,
+          ante: anteVal,
+          packIndex: selectedPack,
+          qIndex: selectedPack * 25,
+          revealedHints: [false, false, false],
+          answerRevealed: false,
+          pot: 0,
+          maxBet: anteVal,
+          winnerInfo: null,
+          players: {}
+        };
+
+        document.getElementById('mp-lobby-select').classList.add('hidden');
+        document.getElementById('mp-host-dashboard').classList.remove('hidden');
+        document.getElementById('mp-player-dashboard').classList.add('hidden');
+
+        document.getElementById('host-pack-select').value = selectedPack;
+        populateHostQuestionSelect();
+
+        if (window.location.protocol === 'file:') {
+          document.getElementById('local-file-warning').classList.remove('hidden');
+        }
+
+        const baseUrl = window.location.href.split('?')[0];
+        const inviteUrl = `${baseUrl}?room=${roomCode}`;
+        document.getElementById('host-room-code-badge').textContent = roomCode;
+        document.getElementById('host-invite-url').value = inviteUrl;
+        document.getElementById('qr-room-code').textContent = `Код: ${roomCode}`;
+
+        const qrBox = document.getElementById('qrcode-box');
+        if (qrBox) {
+          qrBox.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(inviteUrl)}" alt="QR Code" class="w-44 h-44 mx-auto" />`;
+        }
+
+        setupBroadcastChannel(roomCode);
+        renderHostUI();
+        playTone(580, 0.12);
+
+        initHostPeerWhenReady(roomCode);
+      } catch (err) {
+        console.error('Ошибка при запуске режима ведущего:', err);
+        alert('Произошла ошибка запуска: ' + err.message);
+      }
+    };
+
+    function initHostPeerWhenReady(code, attempt = 0) {
+      if (mpRole !== 'host') return;
+      if (typeof Peer === 'undefined') {
+        if (attempt < 15) {
+          setTimeout(() => initHostPeerWhenReady(code, attempt + 1), 600);
+        } else {
+          document.getElementById('host-net-status').innerHTML =
+            `<span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Локальный режим (Код ${code})`;
+        }
+        return;
+      }
+      try {
+        if (peer) peer.destroy();
+        peer = new Peer('lockstock-room-' + code, PEER_CONFIG);
+        peer.on('open', () => {
+          document.getElementById('host-net-status').innerHTML =
+            `<span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span> Онлайн готов (Код ${code})`;
+        });
+        peer.on('connection', (conn) => {
+          hostConnections[conn.peer] = conn;
+          conn.on('data', (data) => handleIncomingMessage(data, conn));
+          conn.on('open', () => {
+            conn.send({ type: 'STATE_SYNC', state: gameState });
+          });
+        });
+      } catch (err) {
+        console.warn('PeerJS init warning:', err);
+      }
+    }
+
+    window.copyInviteLink = function() {
+      const input = document.getElementById('host-invite-url');
+      input.select();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(input.value).catch(() => document.execCommand('copy'));
+      } else {
+        document.execCommand('copy');
+      }
+      playTone(700, 0.1);
+      alert('Ссылка-приглашение скопирована! Отправьте её друзьям.');
+    };
+
+    window.openTestPlayerTab = function() {
+      const url = document.getElementById('host-invite-url').value;
+      window.open(url, '_blank');
+    };
+
+    // Смена пака у Ведущего
+    window.hostSelectPack = function(packIdx) {
+      gameState.packIndex = Number(packIdx);
+      gameState.qIndex = gameState.packIndex * 25;
+      populateHostQuestionSelect();
+      window.hostStartNewRound();
+    };
+
+    window.hostSelectQuestion = function(idx) {
+      gameState.qIndex = Number(idx);
+      gameState.packIndex = Math.floor(gameState.qIndex / 25);
+      document.getElementById('host-pack-select').value = gameState.packIndex;
+      window.hostStartNewRound();
+    };
+
+    // Листание вопросов внутри текущего пака (из 25 вопросов)
+    window.hostChangeQuestion = function(delta) {
+      const startIdx = gameState.packIndex * 25;
+      const offsetInPack = ((gameState.qIndex - startIdx) + delta + 25) % 25;
+      const nextGlobalIdx = startIdx + offsetInPack;
+      document.getElementById('host-question-select').value = nextGlobalIdx;
+      window.hostSelectQuestion(nextGlobalIdx);
+    };
+
+    window.hostStartNewRound = function() {
+      gameState.revealedHints = [false, false, false];
+      gameState.answerRevealed = false;
+      gameState.winnerInfo = null;
+      gameState.pot = 0;
+      gameState.maxBet = 0;
+
+      Object.values(gameState.players).forEach(p => {
+        p.roundStartChips = p.chips;
+        p.folded = false;
+        p.guess = null;
+        const payAnte = Math.min(p.chips, gameState.ante);
+        p.chips -= payAnte;
+        p.currentBet = payAnte;
+        gameState.pot += payAnte;
+        if (payAnte > gameState.maxBet) gameState.maxBet = payAnte;
+        p.lastAction = payAnte > 0 ? `Анте ${payAnte} 🪙` : 'Готов к раунду';
+      });
+
+      playTone(520, 0.15);
+      broadcastStateFromHost();
+    };
+
+    window.hostRevealHint = function(hintIndex) {
+      gameState.revealedHints[hintIndex] = true;
+      playTone(640 + hintIndex * 80, 0.15, 'triangle');
+      broadcastStateFromHost();
+    };
+
+    window.toggleHostPeekAnswers = function() {
+      hostPeekAnswers = !hostPeekAnswers;
+      document.getElementById('host-peek-label').textContent =
+        hostPeekAnswers ? 'Скрыть ответы' : 'Подсмотреть ответы';
+      renderHostUI();
+    };
+
+    // =========================================================================
+    // АВТОМАТИЧЕСКОЕ ОПРЕДЕЛЕНИЕ ПОБЕДИТЕЛЯ И НАЧИСЛЕНИЕ ОЧКОВ
+    // =========================================================================
+    window.hostRevealAnswerAndSettle = function() {
+      if (gameState.answerRevealed) return;
+      gameState.answerRevealed = true;
+
+      const q = QUESTIONS[gameState.qIndex];
+      const correct = q.answer;
+      const allPlayers = Object.values(gameState.players);
+      const activePlayers = allPlayers.filter(p => !p.folded);
+
+      let winners = [];
+
+      if (activePlayers.length === 1) {
+        winners = [activePlayers[0]];
+      } else if (activePlayers.length > 1) {
+        const withGuesses = activePlayers.filter(p => p.guess !== null && !isNaN(p.guess));
+        const pool = withGuesses.length > 0 ? withGuesses : activePlayers;
+
+        let minDiff = Infinity;
+        pool.forEach(p => {
+          const diff = (p.guess !== null && !isNaN(p.guess)) ? Math.abs(p.guess - correct) : Infinity;
+          if (diff < minDiff) minDiff = diff;
+        });
+
+        winners = pool.filter(p => {
+          const diff = (p.guess !== null && !isNaN(p.guess)) ? Math.abs(p.guess - correct) : Infinity;
+          return diff === minDiff;
+        });
+      }
+
+      const potToShare = gameState.pot;
+      const winShare = winners.length > 0 ? Math.floor(potToShare / winners.length) : 0;
+      const winnerIds = winners.map(w => w.id);
+
+      const roundResults = allPlayers.map(p => {
+        const isWin = winnerIds.includes(p.id);
+        if (isWin) {
+          p.chips += winShare;
+        }
+        const netDelta = p.chips - (p.roundStartChips ?? p.chips);
+        const diff = (p.guess !== null && !isNaN(p.guess)) ? Math.abs(p.guess - correct) : null;
+        p.lastAction = isWin
+          ? `🏆 ПОБЕДА! (+${winShare} из банка)`
+          : (p.folded ? `Пас (${netDelta} 🪙)` : `Проигрыш (${netDelta} 🪙)`);
+
+        return {
+          id: p.id,
+          name: p.name,
+          guess: p.guess,
+          diff: diff,
+          folded: p.folded,
+          isWinner: isWin,
+          winShare: isWin ? winShare : 0,
+          netDelta: netDelta,
+          newBalance: p.chips
+        };
+      });
+
+      gameState.winnerInfo = {
+        correctAnswer: correct,
+        unit: q.unit,
+        expl: q.expl,
+        potDistributed: potToShare,
+        winners: winners.map(w => w.name),
+        results: roundResults
+      };
+
+      playTone(880, 0.3, 'triangle');
+      broadcastStateFromHost();
+    };
+
+    window.hostAdjustPlayerChips = function(pid, delta) {
+      const p = gameState.players[pid];
+      if (!p) return;
+      p.chips = Math.max(0, p.chips + delta);
+      broadcastStateFromHost();
+    };
+
+    function renderHostUI() {
+      const q = QUESTIONS[gameState.qIndex] || QUESTIONS[0];
+      const inPackNum = (gameState.qIndex % 25) + 1;
+
+      document.getElementById('host-pack-select').value = gameState.packIndex;
+      document.getElementById('host-question-select').value = gameState.qIndex;
+      document.getElementById('host-pack-badge').textContent = `📦 Пак ${gameState.packIndex + 1}`;
+      document.getElementById('host-q-num').textContent = q.id;
+      document.getElementById('host-q-inpack-num').textContent = `(Вопрос ${inPackNum} из 25 в паке #${gameState.packIndex + 1})`;
+      document.getElementById('host-q-category').textContent = q.category;
+      document.getElementById('host-q-text').textContent = q.q;
+      document.getElementById('host-pot-display').textContent = gameState.pot;
+      document.getElementById('host-maxbet-display').textContent = gameState.maxBet;
+
+      const openedCount = gameState.revealedHints.filter(Boolean).length;
+      document.getElementById('host-round-stage-badge').textContent =
+        gameState.answerRevealed
+          ? 'Этап: Ответ открыт и банк распределён'
+          : `Этап: Торги (открыто подсказок: ${openedCount} из 3)`;
+
+      for (let i = 0; i < 3; i++) {
+        const isRev = gameState.revealedHints[i];
+        document.getElementById(`host-hint-text-${i}`).textContent = q.hints[i];
+        const statusEl = document.getElementById(`host-hint-status-${i}`);
+        const btnEl = document.getElementById(`btn-host-hint-${i}`);
+        const cardEl = document.getElementById(`host-hint-card-${i}`);
+
+        if (isRev) {
+          statusEl.textContent = '✅ Открыта у всех';
+          statusEl.className = 'text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold';
+          btnEl.textContent = `Подсказка ${i + 1} открыта`;
+          btnEl.disabled = true;
+          btnEl.className = 'w-full py-2 px-3 rounded-xl font-bold text-xs bg-emerald-900 text-emerald-400 cursor-default';
+          cardEl.className = 'rounded-2xl border-2 border-amber-400/80 bg-emerald-900/50 p-3.5 flex flex-col justify-between shadow-lg';
+        } else {
+          statusEl.textContent = 'Скрыта от игроков';
+          statusEl.className = 'text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300';
+          btnEl.textContent = `Показать подсказку ${i + 1}`;
+          btnEl.disabled = false;
+          btnEl.className = 'w-full py-2 px-3 rounded-xl font-bold text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 transition shadow';
+          cardEl.className = 'rounded-2xl border border-emerald-700/70 bg-emerald-950/80 p-3.5 flex flex-col justify-between';
+        }
+      }
+
+      const ansBanner = document.getElementById('host-answer-banner');
+      if (gameState.answerRevealed && gameState.winnerInfo) {
+        ansBanner.classList.remove('hidden');
+        document.getElementById('host-correct-answer-val').textContent = `${q.answer} ${q.unit}`;
+        document.getElementById('host-answer-explanation').textContent = q.expl;
+        const winNames = gameState.winnerInfo.winners;
+        document.getElementById('host-winner-announcement').innerHTML =
+          winNames.length > 0
+            ? `<div class="text-xs text-amber-200 uppercase font-bold">Победитель раунда:</div>
+               <div class="font-display font-black text-lg text-amber-400">🏆 ${winNames.join(', ')}</div>
+               <div class="text-xs text-emerald-300">Зачислен банк: +${gameState.winnerInfo.potDistributed} 🪙</div>`
+            : `<div class="text-xs text-rose-300 font-bold">Нет активных победителей</div>`;
+      } else {
+        ansBanner.classList.add('hidden');
+      }
+
+      const playersArr = Object.values(gameState.players);
+      document.getElementById('host-players-count').textContent = playersArr.length;
+      const listEl = document.getElementById('host-players-list');
+
+      if (playersArr.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-8 text-emerald-300/60 text-xs">
+            Пока никто не подключился.<br/>
+            Отправьте ссылку-приглашение участникам или нажмите <strong>«🧪 Тест: открыть игрока»</strong> сверху.
+          </div>`;
+        return;
+      }
+
+      listEl.innerHTML = playersArr.map(p => {
+        const showGuess = gameState.answerRevealed || hostPeekAnswers;
+        const diffVal = (p.guess !== null && !isNaN(p.guess)) ? Number(Math.abs(p.guess - q.answer).toFixed(2)) : null;
+        const guessBadge = p.guess !== null
+          ? (showGuess ? `<span class="text-amber-300 font-mono font-bold">Ответ: ${p.guess} (Δ ${diffVal})</span>` : `<span class="text-emerald-300 font-semibold">🔒 Ответ принят</span>`)
+          : `<span class="text-slate-400">⏳ Вводит ответ...</span>`;
+
+        const isWin = gameState.winnerInfo && gameState.winnerInfo.winners.includes(p.name);
+        const netDelta = p.chips - (p.roundStartChips ?? p.chips);
+        const deltaStr = gameState.answerRevealed
+          ? `<span class="ml-1 text-xs font-bold ${netDelta >= 0 ? 'text-emerald-400' : 'text-rose-400'}">(${netDelta >= 0 ? '+' + netDelta : netDelta})</span>`
+          : '';
+
+        return `
+          <div class="rounded-xl p-3.5 border ${isWin ? 'bg-amber-500/15 border-amber-400 shadow-lg' : (p.folded ? 'bg-black/40 border-rose-900/50 opacity-75' : 'bg-black/40 border-emerald-800')}">
+            <div class="flex items-center justify-between mb-1.5">
+              <div class="font-display font-bold text-sm text-white flex items-center gap-1.5">
+                <span>${isWin ? '🏆' : (p.folded ? '🏳️' : '👤')}</span>
+                <span>${p.name}</span>
+              </div>
+              <div class="font-display font-black text-base text-amber-400">
+                ${p.chips} 🪙 ${deltaStr}
+              </div>
+            </div>
+            <div class="flex items-center justify-between text-xs mb-2">
+              <div>Ставка в раунде: <strong class="text-white">${p.currentBet} 🪙</strong></div>
+              <div>${guessBadge}</div>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-emerald-900/70 text-[11px]">
+              <span class="text-emerald-300 font-medium">${p.lastAction}</span>
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="window.hostAdjustPlayerChips('${p.id}', -50)" class="px-2 py-0.5 rounded bg-rose-950 hover:bg-rose-800 text-rose-200 border border-rose-800" title="Отнять 50 очков">-50</button>
+                <button type="button" onclick="window.hostAdjustPlayerChips('${p.id}', 50)" class="px-2 py-0.5 rounded bg-emerald-900 hover:bg-emerald-700 text-emerald-200 border border-emerald-700" title="Добавить 50 очков">+50</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // ЗАПУСК СЕССИИ ИГРОКА (ПО ССЫЛКЕ ИЛИ КОДУ КОМНАТЫ)
+    // =========================================================================
+    window.startPlayerSession = function() {
+      const nameInput = document.getElementById('join-player-name').value.trim();
+      const codeInput = document.getElementById('join-room-code').value.trim();
+
+      if (!nameInput) {
+        alert('Пожалуйста, введите ваше имя!');
+        return;
+      }
+      if (!codeInput) {
+        alert('Введите код комнаты ведущего!');
+        return;
+      }
+
+      mpRole = 'player';
+      roomCode = codeInput;
+      myPlayerName = nameInput;
+
+      document.getElementById('mp-lobby-select').classList.add('hidden');
+      document.getElementById('mp-host-dashboard').classList.add('hidden');
+      document.getElementById('mp-player-dashboard').classList.remove('hidden');
+
+      document.getElementById('player-my-name').textContent = nameInput;
+      document.getElementById('player-room-badge').textContent = `Комната #${roomCode}`;
+
+      setupBroadcastChannel(roomCode);
+      sendToHost({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: nameInput });
+
+      initPlayerPeerWhenReady(roomCode, nameInput);
+    };
+
+    function initPlayerPeerWhenReady(code, nameInput, attempt = 0) {
+      if (mpRole !== 'player') return;
+      if (typeof Peer === 'undefined') {
+        if (attempt < 15) {
+          setTimeout(() => initPlayerPeerWhenReady(code, nameInput, attempt + 1), 600);
+        }
+        return;
+      }
+      try {
+        if (peer) peer.destroy();
+        peer = new Peer(PEER_CONFIG);
+        peer.on('open', () => {
+          playerConn = peer.connect('lockstock-room-' + code, { reliable: true });
+          playerConn.on('open', () => {
+            document.getElementById('player-status-badge').textContent = '🟢 Подключено к столу ведущего';
+            playerConn.send({ type: 'PLAYER_JOIN', playerId: myPlayerId, name: nameInput });
+          });
+          playerConn.on('data', (data) => handleIncomingMessage(data, playerConn));
+        });
+      } catch (e) {
+        console.warn('PeerJS player error:', e);
+      }
+    }
+
+    window.playerSubmitGuess = function() {
+      const val = document.getElementById('player-guess-input').value;
+      if (val === '' || isNaN(Number(val))) {
+        alert('Введите числовой ответ!');
+        return;
+      }
+      sendToHost({
+        type: 'PLAYER_GUESS',
+        playerId: myPlayerId,
+        guess: Number(val)
+      });
+      document.getElementById('player-guess-saved-badge').textContent = `✅ Отправлен: ${val}`;
+      playTone(620, 0.12);
+    };
+
+    window.playerMakeBet = function(action, amount) {
+      sendToHost({
+        type: 'PLAYER_BET',
+        playerId: myPlayerId,
+        action: action,
+        amount: amount
+      });
+    };
+
+    window.playerCustomRaise = function() {
+      const val = Number(document.getElementById('player-custom-bet').value);
+      if (!val || val <= 0) {
+        alert('Введите сумму повышения!');
+        return;
+      }
+      window.playerMakeBet('raise', val);
+      document.getElementById('player-custom-bet').value = '';
+    };
+
+    function renderPlayerUI() {
+      const q = QUESTIONS[gameState.qIndex] || QUESTIONS[0];
+      const me = gameState.players[myPlayerId];
+      const inPackNum = (gameState.qIndex % 25) + 1;
+
+      document.getElementById('player-q-cat').textContent = `Пак ${(gameState.packIndex || 0) + 1} • ${q.category}`;
+      document.getElementById('player-q-num').textContent = `Вопрос ${inPackNum}/25 (#${q.id})`;
+      document.getElementById('player-q-text').textContent = q.q;
+      document.getElementById('player-pot-val').textContent = gameState.pot;
+
+      if (me) {
+        document.getElementById('player-my-chips').textContent = me.chips;
+        document.getElementById('player-my-bet').textContent = me.currentBet;
+        const toCall = Math.max(0, gameState.maxBet - me.currentBet);
+        document.getElementById('player-to-call').textContent = toCall;
+        document.getElementById('player-status-badge').textContent = `🟢 ${me.lastAction}`;
+        document.getElementById('btn-player-call').textContent =
+          toCall > 0 ? `✅ Уравнять (+${toCall} 🪙)` : '✅ Чек (Без доплаты)';
+        if (me.guess === null) {
+          document.getElementById('player-guess-saved-badge').textContent = 'Не отправлен';
+        }
+      }
+
+      const hintsBox = document.getElementById('player-hints-container');
+      const openedHintsHtml = [];
+      for (let i = 0; i < 3; i++) {
+        if (gameState.revealedHints[i]) {
+          openedHintsHtml.push(`
+            <div class="bg-emerald-950/90 border border-amber-400/60 rounded-xl p-3 text-xs sm:text-sm text-emerald-100">
+              <strong class="text-amber-400">💡 Подсказка ${i + 1}:</strong> ${q.hints[i]}
+            </div>
+          `);
+        }
+      }
+      hintsBox.innerHTML = openedHintsHtml.length > 0
+        ? openedHintsHtml.join('')
+        : `<div class="text-xs text-emerald-300/70 italic">Подсказки пока закрыты ведущим...</div>`;
+
+      const resBox = document.getElementById('player-result-box');
+      if (gameState.answerRevealed && gameState.winnerInfo) {
+        resBox.classList.remove('hidden');
+        document.getElementById('player-revealed-answer').textContent = `${gameState.winnerInfo.correctAnswer} ${gameState.winnerInfo.unit}`;
+        document.getElementById('player-revealed-expl').textContent = gameState.winnerInfo.expl;
+        const winList = gameState.winnerInfo.winners;
+        document.getElementById('player-winner-text').textContent =
+          winList.length > 0
+            ? `🏆 Победитель: ${winList.join(', ')} (забирает банк ${gameState.winnerInfo.potDistributed} 🪙)`
+            : 'Раунд завершён';
+      } else {
+        resBox.classList.add('hidden');
+      }
+
+      const tableEl = document.getElementById('player-table-list');
+      tableEl.innerHTML = Object.values(gameState.players).map(p => `
+        <div class="flex items-center justify-between bg-black/35 px-3 py-2 rounded-lg border border-emerald-800/60">
+          <div>
+            <span class="font-bold text-white">${p.name}</span>
+            <span class="ml-2 text-emerald-300">${p.lastAction}</span>
+          </div>
+          <div class="font-mono font-bold text-amber-400">
+            Ставка: ${p.currentBet} | Баланс: ${p.chips} 🪙
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.leaveMultiplayer = function() {
+      try { if (peer) peer.destroy(); } catch (e) {}
+      try { if (bcChannel) bcChannel.close(); } catch (e) {}
+      mpRole = null;
+      document.getElementById('mp-lobby-select').classList.remove('hidden');
+      document.getElementById('mp-host-dashboard').classList.add('hidden');
+      document.getElementById('mp-player-dashboard').classList.add('hidden');
+      window.showHostCardInLobby();
+    };
+
+    window.showHostCardInLobby = function() {
+      document.getElementById('lobby-host-card').classList.remove('hidden');
+      document.getElementById('lobby-cards-grid').classList.add('md:grid-cols-2');
+      document.getElementById('btn-show-host-card-again').classList.add('hidden');
+    };
+
+    // =========================================================================
+    // ОДИНОЧНЫЙ РЕЖИМ С ИИ (Стол с ИИ) С ПОДДЕРЖКОЙ 4 ПАКОВ
+    // =========================================================================
+    let soloPack = 0;
+    let soloIdx = 0;
+    let soloChips = 1000;
+    let soloPot = 200;
+    let soloHintsOpen = 0;
+
+    window.soloSelectPack = function(packVal) {
+      soloPack = Number(packVal);
+      soloIdx = soloPack * 25;
+      initSoloMode();
+    };
+
+    function initSoloMode() {
+      const q = QUESTIONS[soloIdx];
+      const inPackNum = (soloIdx % 25) + 1;
+      soloPot = 200;
+      soloHintsOpen = 0;
+      document.getElementById('solo-q-title').textContent = `Пак ${soloPack + 1} (${inPackNum}/25) • Вопрос #${q.id} • ${q.category}`;
+      document.getElementById('solo-q-text').textContent = q.q;
+      document.getElementById('solo-pot').textContent = soloPot;
+      document.getElementById('solo-user-chips').textContent = soloChips;
+      document.getElementById('solo-result').classList.add('hidden');
+      renderSoloHints();
+    }
+
+    function renderSoloHints() {
+      const q = QUESTIONS[soloIdx];
+      document.getElementById('solo-hints').innerHTML = [0, 1, 2].map(i => `
+        <div class="p-3.5 rounded-2xl border ${i < soloHintsOpen ? 'bg-emerald-950 border-amber-400 text-white' : 'bg-black/30 border-emerald-800 text-emerald-500'} text-xs sm:text-sm">
+          <div class="font-bold text-amber-400 mb-1">💡 Подсказка ${i + 1}</div>
+          <div>${i < soloHintsOpen ? q.hints[i] : 'Откроется на следующем шаге ставок...'}</div>
+        </div>
+      `).join('');
+    }
+
+    window.soloStep = function(action) {
+      const q = QUESTIONS[soloIdx];
+      if (action === 'fold') {
+        soloChips -= 50;
+        const res = document.getElementById('solo-result');
+        res.classList.remove('hidden');
+        res.innerHTML = `Вы спасовали. Правильный ответ: <strong>${q.answer} ${q.unit}</strong>. ${q.expl}`;
+        document.getElementById('solo-user-chips').textContent = soloChips;
+        return;
+      }
+
+      const bet = action === 'raise' ? 150 : 50;
+      soloChips -= bet;
+      soloPot += bet * 4;
+      document.getElementById('solo-pot').textContent = soloPot;
+      document.getElementById('solo-user-chips').textContent = soloChips;
+
+      if (soloHintsOpen < 3) {
+        soloHintsOpen++;
+        renderSoloHints();
+      } else {
+        const userGuess = Number(document.getElementById('solo-guess').value || 0);
+        const userDiff = Number(Math.abs(userGuess - q.answer).toFixed(2));
+        const botDiff = Math.max(1, Math.round(Math.abs(q.answer) * (0.03 + Math.random() * 0.15)));
+        const won = userDiff <= botDiff;
+        if (won) soloChips += soloPot;
+        document.getElementById('solo-user-chips').textContent = soloChips;
+        const res = document.getElementById('solo-result');
+        res.classList.remove('hidden');
+        res.innerHTML = `
+          <div class="font-bold text-base ${won ? 'text-amber-400' : 'text-rose-400'} mb-1">
+            ${won ? `🏆 Вы выиграли банк ${soloPot} 🪙!` : `Бот оказался точнее (погрешность бота: ${botDiff}, ваша: ${userDiff}).`}
+          </div>
+          <div>Правильный ответ: <strong>${q.answer} ${q.unit}</strong> — ${q.expl}</div>
+        `;
+      }
+    };
+
+    window.soloNextQuestion = function() {
+      const startIdx = soloPack * 25;
+      const nextOffset = ((soloIdx - startIdx) + 1) % 25;
+      soloIdx = startIdx + nextOffset;
+      initSoloMode();
+    };
+
+    // Первичная инициализация
+    populateHostQuestionSelect();
+    window.filterCatalogByPack(0);
+    initSoloMode();
+
+    const params = new URLSearchParams(window.location.search);
+    const invitedRoom = params.get('room');
+    if (invitedRoom) {
+      document.getElementById('join-room-code').value = invitedRoom;
+      document.getElementById('lobby-main-heading').textContent = `Приглашение в комнату #${invitedRoom}`;
+      document.getElementById('lobby-sub-heading').textContent = 'Введите ваше имя ниже, чтобы сесть за игровой стол и делать ставки со своего устройства.';
+      document.getElementById('lobby-host-card').classList.add('hidden');
+      document.getElementById('lobby-cards-grid').classList.remove('md:grid-cols-2');
+      document.getElementById('btn-show-host-card-again').classList.remove('hidden');
+      document.getElementById('join-player-name').focus();
+    }
+  </script>
+</body>
+</html>
