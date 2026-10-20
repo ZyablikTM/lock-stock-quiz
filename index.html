@@ -1164,7 +1164,7 @@
         let client;
         try {
           client = mqtt.connect(url, {
-            keepalive: 30,
+            keepalive: 10,   // молча оборвавшееся соединение обнаруживается за ~15 с, а не за ~1 мин
             reconnectPeriod: 3000,
             connectTimeout: 10000,
             clean: true,
@@ -1314,6 +1314,64 @@
     function stopTick() {
       if (tickTimer) clearInterval(tickTimer);
       tickTimer = null;
+    }
+
+    // =========================================================================
+    // ВОЗВРАТ НА СТРАНИЦУ (телефон: свернули браузер, переключились в мессенджер, погас экран)
+    // =========================================================================
+    // Мобильный браузер замораживает свёрнутую вкладку. Её сокеты «умирают», но ещё около
+    // минуты выглядят открытыми — ведущий кажется онлайн, но не слышит игроков.
+    // Поэтому при возвращении сразу пересоздаём MQTT-соединения и переподнимаем P2P.
+    let lastResumeAt = 0;
+
+    function restartMqtt() {
+      clearTimeout(net.mqttWaitTimer);
+      net.mqtt.forEach(({ client }) => { try { client.end(true); } catch (e) {} });
+      net.mqtt = [];
+      setupMqtt();
+    }
+
+    function resumeConnections() {
+      if (!mpRole || (mpRole === 'player' && playerHalted)) return;
+      const now = Date.now();
+      if (now - lastResumeAt < 2000) return; // visibilitychange, pageshow и online часто приходят пачкой
+      lastResumeAt = now;
+
+      restartMqtt();
+      if (net.peer && !net.peer.destroyed && net.peer.disconnected) {
+        try { net.peer.reconnect(); } catch (e) {}
+      }
+      if (mpRole === 'host') {
+        broadcastNow();
+      } else {
+        try { if (net.hostConn) net.hostConn.close(); } catch (e) {}
+        net.hostConn = null;
+        connectToHostPeer();
+        sendJoin();
+        if (inFlight) inFlight.sentAt = 0; // сразу повторить неподтверждённое действие
+      }
+      requestWakeLock();
+      updateNetStatus();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') resumeConnections();
+    });
+    window.addEventListener('pageshow', (ev) => { if (ev.persisted) resumeConnections(); });
+    window.addEventListener('online', resumeConnections);
+
+    // Не даём экрану погаснуть, пока открыт стол: погасший экран замораживает страницу
+    let wakeLock = null;
+
+    async function requestWakeLock() {
+      if (!mpRole || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
+      if (wakeLock && !wakeLock.released) return;
+      try { wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
+    }
+
+    function releaseWakeLock() {
+      try { if (wakeLock) wakeLock.release(); } catch (e) {}
+      wakeLock = null;
     }
 
     function handleIncomingMessage(data) {
@@ -1663,6 +1721,7 @@
       setupMqtt();
       setupHostPeer();
       startTick(hostTick);
+      requestWakeLock();
 
       broadcastNow();
       playTone(580, 0.12);
@@ -2045,6 +2104,7 @@
       setupPlayerPeer();
       sendJoin();
       startTick(playerTick);
+      requestWakeLock();
       renderPlayerUI();
     }
 
@@ -2160,6 +2220,7 @@
       playerHalted = reason;
       stopTick();
       teardownNet();
+      releaseWakeLock();
       sstore.del(PLAYER_SAVE_KEY);
       actionQueue = [];
       inFlight = null;
@@ -2428,6 +2489,7 @@
       stopTick();
       mpRole = null;
       teardownNet(600);
+      releaseWakeLock();
 
       document.getElementById('mp-lobby-select').classList.remove('hidden');
       document.getElementById('mp-host-dashboard').classList.add('hidden');
